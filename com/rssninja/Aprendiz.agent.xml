@@ -24,6 +24,12 @@ package="com.rssninja">
 	            <value>jadex.adapter.fipa.SFipa.REQUEST</value>
 	        </parameter>
 	    </messageevent>
+            <messageevent name="inform" direction="send" type="fipa">
+                <parameter name="performative" class="String" direction="fixed">
+                    <value>jadex.adapter.fipa.SFipa.INFORM</value>
+                </parameter>
+</messageevent>
+
 	</events>
 	
 </agent>
