@@ -10,7 +10,7 @@ package="com.rssninja">
 
 	<plans>
 	    <plan name="retrieveData">
-	        <body>new Aprendiz()</body>
+	        <body class="Aprendiz"></body>
 	        <waitqueue>
 	            <messageevent ref="request_info" />
 	        </waitqueue>
@@ -25,6 +25,7 @@ package="com.rssninja">
 	    </messageevent>
 	</events>
 	
+	<!--
 	<configurations>
 	    <configuration name="default">
 	        <plans>
@@ -32,6 +33,6 @@ package="com.rssninja">
 	        </plans>
 	    </configuration>
 	</configurations>
-
+-->
 </agent>
 
