@@ -1,0 +1,38 @@
+<!--
+TranslationAgent
+-->
+<agent xmlns="http://jadex.sourceforge.net/jadex"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://jadex.sourceforge.net/jadex
+http://jadex.sourceforge.net/jadex-0.96.xsd"
+name="Aprendiz"
+package="com.rssninja">
+
+	<plans>
+	    <plan name="retrieveData">
+	        <body class="Aprendiz"></body>
+	        <waitqueue>
+	            <messageevent ref="request_info" />
+	        </waitqueue>
+	    </plan>
+	</plans>
+	
+	<events>
+	    <messageevent name="request_info" direction="receive" type="fipa">
+	        <parameter name="performative" class="String" direction="fixed">
+	            <value>jadex.adapter.fipa.SFipa.REQUEST</value>
+	        </parameter>
+	    </messageevent>
+	</events>
+	
+	<!--
+	<configurations>
+	    <configuration name="default">
+	        <plans>
+	            <initialplan ref="retrieveData" />
+	        </plans>
+	    </configuration>
+	</configurations>
+-->
+</agent>
+
