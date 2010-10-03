@@ -10,7 +10,7 @@ public class Aprendiz extends Plan {
     }
 
     @Override
-    public void body() {
+    public void body(){
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         String content = (String) message.getContent();
         System.out.println(content);
@@ -24,6 +24,6 @@ public class Aprendiz extends Plan {
 
         sendMessage(message.createReply(SFipa.INFORM, "OK"));
 
-
     }
+    
 }
