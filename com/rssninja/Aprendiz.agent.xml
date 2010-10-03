@@ -28,8 +28,7 @@ package="com.rssninja">
                 <parameter name="performative" class="String" direction="fixed">
                     <value>jadex.adapter.fipa.SFipa.INFORM</value>
                 </parameter>
-</messageevent>
-
+            </messageevent>
 	</events>
 	
 </agent>
