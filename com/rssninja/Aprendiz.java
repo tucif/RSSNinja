@@ -1,5 +1,6 @@
 package com.rssninja;
 //import java.util.*;
+
 import jadex.runtime.*;
 import org.json.simple.*;
 import jadex.adapter.fipa.SFipa;
@@ -15,15 +16,20 @@ public class Aprendiz extends Plan {
         String content = (String) message.getContent();
         System.out.println(content);
 
-        //message format: {"service": "twitter","tag": "teambj"}
-        JSONObject obj = (JSONObject)JSONValue.parse(content);
-        System.out.println("======parsed input======");
-        System.out.println(obj.get("service"));
-        System.out.println(obj.get("tag"));
-        System.out.println();
+        JSONObject obj=null;
+        try{
+            obj = (JSONObject)JSONValue.parse(content);
 
-        sendMessage(message.createReply(SFipa.INFORM, "OK"));
+            System.out.println("======parsed input======");
+            System.out.println(obj.get("service"));
+            System.out.println(obj.get("tag"));
+            System.out.println();
 
+            sendMessage(message.createReply("inform", "OK"));
+            
+        }catch(Exception e){
+            sendMessage(message.createReply("inform","Could not understand: "+content));
+        }
     }
     
 }
