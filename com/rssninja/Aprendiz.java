@@ -2,7 +2,7 @@ package com.rssninja;
 //import java.util.*;
 import jadex.runtime.*;
 import org.json.simple.*;
-
+import jadex.adapter.fipa.SFipa;
 public class Aprendiz extends Plan {
 
     public Aprendiz() {
@@ -22,7 +22,7 @@ public class Aprendiz extends Plan {
         System.out.println(obj.get("tag"));
         System.out.println();
 
-        sendMessage(message.createReply("inform", "OK"));
+        sendMessage(message.createReply(SFipa.INFORM, "OK"));
 
 
     }
