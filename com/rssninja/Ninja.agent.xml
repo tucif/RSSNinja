@@ -12,6 +12,14 @@ xsi:schemaLocation="http://jadex.sourceforge.net/jadex
 http://jadex.sourceforge.net/jadex-0.96.xsd"
 name="Ninja"
 package="com.rssninja">
+    <capabilities>
+        <capability name="amscap" file="jadex.planlib.AMS" />
+    </capabilities>
+    <goals>
+        <achievegoalref name = "ams_create_agent">
+            <concrete ref="amscap.ams_create_agent" />
+        </achievegoalref>
+    </goals>
     <plans>
         <plan name = "getinfo">
             <body>new Ninja()</body>
