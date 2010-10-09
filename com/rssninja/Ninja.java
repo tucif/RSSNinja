@@ -22,11 +22,17 @@ public class Ninja extends Plan{
         String content = (String) message.getContent();
         System.out.println(content);
         int count = Integer.parseInt(content);
-        if(count>0){
-            while(count>0){
-                sendMessage(message.createReply(SFipa.INFORM, "OK"));
-                count --;
-            }
+        while(count>0){
+            sendMessage(message.createReply(SFipa.INFORM, "OK"));
+            count --;
+          /*  Aprendiz a=new Aprendiz();
+            a.body();
+            IMessageEvent ime = createMessageEvent("");
+            ime.setContent("shalalala");
+            ime.getParameterSet(SFipa.RECEIVERS).addValue(a.getAgentIdentifier());
+            sendMessage(ime);*/
+            IGoal ca = createGoal("ams_create_agent");
+            
         }
     }
 
