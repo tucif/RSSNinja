@@ -30,5 +30,4 @@ package="com.rssninja">
                 </parameter>
             </messageevent>
 	</events>
-	
-</agent>i
+</agent>

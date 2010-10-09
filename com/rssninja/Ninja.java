@@ -5,6 +5,7 @@
 
 package com.rssninja;
 
+import jadex.adapter.fipa.AgentIdentifier;
 import jadex.runtime.*;
 import jadex.adapter.fipa.SFipa;
 
@@ -33,7 +34,14 @@ public class Ninja extends Plan{
             ime.getParameterSet(SFipa.RECEIVERS).addValue(a.getAgentIdentifier());
             sendMessage(ime);*/
             IGoal ca = createGoal("ams_create_agent");
-            
+            ca.getParameter("type").setValue("com.rssninja.Aprendiz");
+            dispatchSubgoalAndWait(ca);
+            AgentIdentifier createdAgent  = (AgentIdentifier)ca.getParameter("agentidentifier").getValue();
+
+            IMessageEvent ime = createMessageEvent("poll");
+            ime.setContent("{\"service\":\"twitter\",\"tag\":\"paradamamdasd\"}");
+            ime.getParameterSet(SFipa.RECEIVERS).addValue(createdAgent);
+            sendMessage(ime);
         }
     }
 
