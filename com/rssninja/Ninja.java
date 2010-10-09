@@ -22,12 +22,10 @@ public class Ninja extends Plan{
         String content = (String) message.getContent();
         System.out.println(content);
         int count = Integer.parseInt(content);
-        if(count>0){
             while(count>0){
                 sendMessage(message.createReply(SFipa.INFORM, "OK"));
                 count --;
-            }
-        }
+          }
     }
 
 }
