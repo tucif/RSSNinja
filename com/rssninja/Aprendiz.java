@@ -25,7 +25,9 @@ public class Aprendiz extends Plan {
             System.out.println(obj.get("service"));
             System.out.println(obj.get("tag"));
             System.out.println();
-
+            if(obj.get("service")=="twitter"){
+                
+            }
             sendMessage(message.createReply("inform", "OK"));
             
         }catch(Exception e){

@@ -27,12 +27,7 @@ public class Ninja extends Plan{
         while(count>0){
             sendMessage(message.createReply(SFipa.INFORM, "OK"));
             count --;
-          /*  Aprendiz a=new Aprendiz();
-            a.body();
-            IMessageEvent ime = createMessageEvent("");
-            ime.setContent("shalalala");
-            ime.getParameterSet(SFipa.RECEIVERS).addValue(a.getAgentIdentifier());
-            sendMessage(ime);*/
+            
             IGoal ca = createGoal("ams_create_agent");
             ca.getParameter("type").setValue("com.rssninja.Aprendiz");
             dispatchSubgoalAndWait(ca);
