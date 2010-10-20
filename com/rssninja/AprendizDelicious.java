@@ -24,8 +24,8 @@ public class AprendizDelicious extends Plan {
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         String tag = (String) message.getContent();
 
-        String popularUrlString="http://feeds.delicious.com/v2/json/popular/"+tag;
-        String recentUrlString="http://feeds.delicious.com/v2/json/tag/"+tag;
+        String popularUrlString="http://feeds.delicious.com/v2/json/popular/"+tag+"?count=4";
+        String recentUrlString="http://feeds.delicious.com/v2/json/tag/"+tag+"?count=4";
 
         JSONArray popularLinks = getJSONFromURL(popularUrlString);
         JSONArray recentLinks = getJSONFromURL(recentUrlString);
