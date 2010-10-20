@@ -24,53 +24,100 @@ public class AprendizDelicious extends Plan {
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         String tag = (String) message.getContent();
 
-        System.out.println("service=Delicious");
-        System.out.println("tag="+tag);
-        System.out.println();
-
         String popularUrlString="http://feeds.delicious.com/v2/json/popular/"+tag;
         String recentUrlString="http://feeds.delicious.com/v2/json/tag/"+tag;
 
-        URL popularUrl=null;
-        URL recentUrl=null;
-        
+        JSONArray popularLinks = getJSONFromURL(popularUrlString);
+        JSONArray recentLinks = getJSONFromURL(recentUrlString);
+
+        sendMessagesToNinja(popularLinks, message);
+        sendMessagesToNinja(recentLinks,message);
+    }
+
+    public JSONArray getJSONFromURL(String urlString){
+        URL url=null;
         BufferedReader br=null;
-
+        JSONArray jsonArray = null;
         try {
-            popularUrl = new URL(popularUrlString);
-            recentUrl = new URL(recentUrlString);
+            url = new URL(urlString);
         } catch (MalformedURLException ex) {
-            Logger.getLogger(AprendizDelicious.class.getName()).log(Level.SEVERE, null, ex);
+            //TODO: do something when this happens
         }
+        try {
+            br = new BufferedReader(new InputStreamReader(url.openStream()));
+        } catch (IOException ex) {
+            //TODO: do something when this happens
+        }
+        try {
+            jsonArray=(JSONArray)JSONValue.parse(br.readLine());
+        } catch (IOException ex) {
+            //TODO: do something when this happens
+        }
+
+        return jsonArray;
+    }
+
+    public void sendMessagesToNinja(JSONArray jsonArray, IMessageEvent message){
+        String urlString=null;
+        JSONObject currentObject= null;
+        JSONObject objectToSend=null;
+        JSONObject metaData = null;
         
+        for(int i=0; i<jsonArray.size(); i++){
+            objectToSend=new JSONObject();
+            currentObject= (JSONObject)jsonArray.get(i);
+
+            urlString= currentObject.get("u").toString();
+
+            objectToSend.put("service","delicious");
+            objectToSend.put("link",urlString);
+            objectToSend.put("content",getContentFromURL(urlString));
+
+            //generate Meta
+            metaData=new JSONObject();
+            metaData.put("type","html");
+            metaData.put("title",currentObject.get("d").toString());
+            metaData.put("date",currentObject.get("dt").toString());
+            metaData.put("relatedTags",currentObject.get("t").toString());
+
+            objectToSend.put("meta",metaData.toString());
+            System.out.println("metadata: "+metaData.toString());
+
+            sendMessage(message.createReply("inform",objectToSend.toString()));
+
+        }
+    }
+
+    public String getContentFromURL(String urlString){
+        BufferedReader br = null;
+        StringBuilder sb= new StringBuilder("");
+        URL url=null;
         try {
-            br = new BufferedReader(new InputStreamReader(popularUrl.openStream()));
+            url = new URL(urlString);
+        } catch (MalformedURLException ex) {
+            //TODO: do something when this happens
+            System.out.println("MalformedURL: "+urlString.toString());
+        }
+
+        try {
+            br= new BufferedReader(new InputStreamReader(url.openStream()));
         } catch (IOException ex) {
-            Logger.getLogger(AprendizDelicious.class.getName()).log(Level.SEVERE, null, ex);
+            //TODO: do something when this happens
         }
         try {
-            System.out.println(br.readLine());
+            sb= new StringBuilder("");
+            String nextLine="";
+            while(true){
+                nextLine=br.readLine();
+                if(nextLine==null)
+                    break;
+                sb.append(nextLine);
+            }
         } catch (IOException ex) {
-            Logger.getLogger(AprendizDelicious.class.getName()).log(Level.SEVERE, null, ex);
+            //TODO: do something when this happens
         }
 
-        try {
-            br = new BufferedReader(new InputStreamReader(recentUrl.openStream()));
-        } catch (IOException ex) {
-            Logger.getLogger(AprendizDelicious.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            System.out.println(br.readLine());
-        } catch (IOException ex) {
-            Logger.getLogger(AprendizDelicious.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        //TODO: format info from delicious
-
-        String info="I got something from delicious";
-
-        sendMessage(message.createReply("inform", info));
-
+        return sb.toString();
     }
 
 }
