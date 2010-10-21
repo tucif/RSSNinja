@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.simple.JSONArray;
@@ -66,9 +67,31 @@ public class AprendizTwitpic  extends Plan{
     }
     public void SendMessageToNinja(JSONArray photos,IMessageEvent message){
         System.out.println("Se va a enviar un mensaje");
+        JSONObject objectToSend = null;
+        JSONObject metadata = null;
+        
         if(photos == null){
-            sendMessage(message.createReply("inform","Error dude!"));
+            //if you reach here that means that your tag doesn't generate results
+            sendMessage(message.createReply("inform","ooops!"));
+        }else{
+            //We receive a great JSONAarray , thx to twitpic API :D
+            for (Object photo : photos) {
+                objectToSend = new JSONObject();
+                objectToSend.put("service", "twitpic");
+                objectToSend.put("link", "http://twitpic.com/"+((JSONObject)photo).get("id"));
+                objectToSend.put("content",((JSONObject)photo).get("message"));
+
+                metadata = new JSONObject();
+                metadata.put("type","fulltext");
+                JSONObject user = (JSONObject)((JSONObject)photo).get("user");
+                metadata.put("author",user.get("user_name"));
+                metadata.put("time",((JSONObject)photo).get("timestamp"));
+                metadata.put("website",user.get("website"));
+
+                objectToSend.put("metadata", metadata);
+                //add metadata
+                sendMessage(message.createReply("inform",objectToSend.toString()));
+            }
         }
-        sendMessage(message.createReply("inform",photos.toString()));
     }
 }
