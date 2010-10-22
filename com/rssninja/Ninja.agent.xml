@@ -32,6 +32,7 @@ package="com.rssninja">
         </plan>
     </plans>
     <events>
+        <messageevent name="any_message" direction="receive" type="fipa"/>
         <messageevent name="pull" direction="receive" type="fipa">
             <parameter name="performative" class="String" direction="fixed">
                 <value>jadex.adapter.fipa.SFipa.REQUEST</value>

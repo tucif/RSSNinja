@@ -32,15 +32,14 @@ public class Ninja extends Plan{
         String contentStr = (String) message.getContent();
         System.out.println(contentStr);
 
-        if(message.getType().equals("inform")){
-            System.out.println("RECEIVED SEARCH!!!!!!******************");
-        }
-
         //Json format: {"search":"tag"}
         JSONObject content = (JSONObject)JSONValue.parse(contentStr);
         if(content.containsKey("search")){
            String tag = (String)content.get("search");
            sendTagToAll(tag);
+        }
+        if(content.containsKey("content")){
+            System.out.println("RECEIVED INFO!!!!!!!!!!!!");
         }
     }
 
@@ -55,6 +54,7 @@ public class Ninja extends Plan{
             IGoal ca = createGoal("ams_create_agent");
             ca.getParameter("type").setValue(path);
             dispatchSubgoalAndWait(ca);
+          
             AgentIdentifier createdAgent = (AgentIdentifier)ca.getParameter("agentidentifier").getValue();
             ime.getParameterSet(SFipa.RECEIVERS).addValue(createdAgent);
         }
