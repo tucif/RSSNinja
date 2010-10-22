@@ -8,14 +8,14 @@ import org.json.simple.*;
 public class AprendizDelicious extends Plan {
 
     public AprendizDelicious() {
-        System.out.println("AprendizDelicious creado");
+        System.out.println("[De] AprendizDelicious creado");
     }
 
     @Override
     public void body(){
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         String tag = (String) message.getContent();
-        System.out.println(tag);
+        System.out.println("[De] Received tag: "+tag);
         String popularUrlString="http://feeds.delicious.com/v2/json/popular/"+tag+"?count=4";
         String recentUrlString="http://feeds.delicious.com/v2/json/tag/"+tag+"?count=4";
 
@@ -57,7 +57,7 @@ public class AprendizDelicious extends Plan {
             String jsonResult = JSONValue.toJSONString(objectToSend);
 
             sendMessage(message.createReply("inform",jsonResult));
-            System.out.println("message sent");
+            System.out.println("[De] Sent info back to Ninja");
         }
     }
 }

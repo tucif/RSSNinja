@@ -11,18 +11,17 @@ import org.json.simple.*;
 public class AprendizTwitterSearch extends Plan {
 
     public AprendizTwitterSearch() {
-        System.out.println("Aprendiz twitter search creado");
-
+        System.out.println("[Ts] Aprendiz twitter search creado");
     }
 
     @Override
     public void body() {
         IMessageEvent message = (IMessageEvent) getInitialEvent();
-        String content = (String) message.getContent();
-        System.out.println(content);
-        String dict = "http://search.twitter.com/search.json?q="+content;
+        String tag = (String) message.getContent();
+        System.out.println("[Ts] Received tag: "+tag);
+        String dict = "http://search.twitter.com/search.json?q="+tag;
 
-        System.out.println("respuesta recibida");
+        //System.out.println("respuesta recibida");
 
         JSONObject response = UrlManager.getJSONObjFromURL(dict);
         JSONArray results = (JSONArray) response.get("results");
@@ -31,7 +30,10 @@ public class AprendizTwitterSearch extends Plan {
             System.out.println(((JSONObject)results.get(i)).get("text"));
             System.out.println();
         }
-        
+        //TODO: Send messages back to ninja
+        //System.out.println("[Ts] Sent info back to Ninja");
+
         sendMessage(message.createReply("inform", "OK"));
+        
     }
 }

@@ -8,11 +8,6 @@ package com.rssninja.aprendiz;
 import com.rssninja.utils.UrlManager;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -22,7 +17,7 @@ import org.json.simple.JSONObject;
  */
 public class AprendizTwitpic  extends Plan{
     public AprendizTwitpic(){
-        System.out.println("Se ha creado un agente Twitpic!");
+        System.out.println("[Tp] Aprendiz Twitpic creado");
         //API Key 88f7a7eee284d6b811d8f1f0621002ab<--- flickr
         //API SECRET c2d41bc887cb511f<---Flickr
     }
@@ -30,6 +25,7 @@ public class AprendizTwitpic  extends Plan{
     public void body() {
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         String tag = (String) message.getContent();
+        System.out.println("[Tp] Received tag: "+tag);
         String api = "http://api.twitpic.com/2/tags/show.json?tag="+tag;
         System.out.println(api);
         SendMessageToNinja(getPictures(api), message);
@@ -44,7 +40,7 @@ public class AprendizTwitpic  extends Plan{
 
         response = UrlManager.getJSONObjFromURL(url);
         //verify if images != null
-        if(response.get("images") != "null"){
+        if(response.containsKey("images")){
             photos = (JSONArray)response.get("images");
         }
 
@@ -77,6 +73,7 @@ public class AprendizTwitpic  extends Plan{
                 objectToSend.put("metadata", metadata);
                 //add metadata
                 sendMessage(message.createReply("inform",objectToSend.toString()));
+                System.out.println("[Tp] Sent info back to Ninja");
             }
         }
     }

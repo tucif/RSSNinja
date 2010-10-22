@@ -8,14 +8,14 @@ import org.json.simple.*;
 public class AprendizWikipedia extends Plan {
 
     public AprendizWikipedia() {
-        System.out.println("AprendizWikipedia creado");
+        System.out.println("[Wk] AprendizWikipedia creado");
     }
 
     @Override
     public void body(){
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         String tag = (String) message.getContent();
-
+        System.out.println("[Wk] Received tag: "+tag);
         String url="http://en.wikipedia.org/w/index.php?action=render&title="+tag;
 
         String wikiText = UrlManager.getContentFromURL(url);
@@ -31,6 +31,7 @@ public class AprendizWikipedia extends Plan {
         objectToSend.put("meta",metaData.toString());
 
         sendMessage(message.createReply("inform",objectToSend.toString()));
+        System.out.println("[Wk] Sent info back to Ninja");
 
     }
 }

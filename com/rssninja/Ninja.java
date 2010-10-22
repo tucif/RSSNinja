@@ -31,7 +31,11 @@ public class Ninja extends Plan{
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         String contentStr = (String) message.getContent();
         System.out.println(contentStr);
-        
+
+        if(message.getType().equals("inform")){
+            System.out.println("RECEIVED SEARCH!!!!!!******************");
+        }
+
         //Json format: {"search":"tag"}
         JSONObject content = (JSONObject)JSONValue.parse(contentStr);
         if(content.containsKey("search")){

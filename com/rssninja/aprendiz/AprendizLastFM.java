@@ -16,25 +16,25 @@ import org.json.simple.*;
 public class AprendizLastFM extends Plan{
 
     public AprendizLastFM(){
-        System.out.println("Aprendiz LastFM creado!");
+        System.out.println("[Fm] AprendizLastFM creado");
     }
     @Override
     public void body() {
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         String tag = (String) message.getContent();
-
+        System.out.println("[Fm] Received tag: "+tag);
         String url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&format=json&&api_key=b25b959554ed76058ac220b7b2e0a026&artist="+tag;
         SendMessagesToNinja(getTopAlbums(url), message);
     }
     public JSONArray getTopAlbums(String source){
         JSONArray albums = null;
-        JSONObject json = UrlManager.getJSONObjFromURL(source); //(JSONObject)JSONValue.parse(r);
+        JSONObject json = UrlManager.getJSONObjFromURL(source);
 
-        if(json.get("error")==null){
+        if(!json.containsKey("error")){
             JSONObject topAlbums = (JSONObject)json.get("topalbums");
-            if(topAlbums.get("album")==null){
+            if(!topAlbums.containsKey("album")){
                 //Artist but no album
-                System.out.println("No tiene album");
+                System.out.println("[Fm] No tiene album");
                 return null;
             }else{
                 albums = (JSONArray) topAlbums.get("album");
@@ -42,7 +42,7 @@ public class AprendizLastFM extends Plan{
             }
         }else{
             //No artis with that tag
-            System.out.println("no tiene artista");
+            System.out.println("[Fm] no tiene artista");
             return null;
         }
     }
@@ -61,6 +61,7 @@ public class AprendizLastFM extends Plan{
                 metadata.put("date", "");
                 album.put("metadata", metadata);
                 sendMessage(message.createReply("inform",album.toString()));
+                System.out.println("[Fm] Sent info back to Ninja");
             }
         }else{
             /*
@@ -76,6 +77,7 @@ public class AprendizLastFM extends Plan{
             metadata.put("date", "10/10/10");
             album.put("metadata", metadata);
             sendMessage(message.createReply("inform",album.toString()));
+            System.out.println("[Fm] Sent info back to Ninja");
         }
     }
 }
