@@ -19,6 +19,9 @@ package="com.rssninja">
         <achievegoalref name = "ams_create_agent">
             <concrete ref="amscap.ams_create_agent" />
         </achievegoalref>
+        <achievegoalref name = "ams_destroy_agent">
+            <concrete ref="amscap.ams_destroy_agent" />
+        </achievegoalref>
     </goals>
     <plans>
         <plan name = "getinfo">
@@ -39,7 +42,7 @@ package="com.rssninja">
                 <value>jadex.adapter.fipa.SFipa.INFORM</value>
             </parameter>
         </messageevent>
-        <messageevent name="poll" direction="send" type="fipa">
+        <messageevent name="search" direction="send" type="fipa">
             <parameter name="performative" class="String" direction="fixed">
                 <value>jadex.adapter.fipa.SFipa.REQUEST</value>
             </parameter>
