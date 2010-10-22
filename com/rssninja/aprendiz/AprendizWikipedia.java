@@ -16,7 +16,7 @@ public class AprendizWikipedia extends Plan {
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         String tag = (String) message.getContent();
 
-        String url="http://en.wikipedia.org/w/index.php?action=raw&title="+tag;
+        String url="http://en.wikipedia.org/w/index.php?action=render&title="+tag;
 
         String wikiText = UrlManager.getContentFromURL(url);
 

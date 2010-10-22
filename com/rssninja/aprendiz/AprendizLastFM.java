@@ -5,6 +5,7 @@
 
 package com.rssninja.aprendiz;
 
+import com.rssninja.utils.UrlManager;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 import org.json.simple.*;
@@ -31,21 +32,9 @@ public class AprendizLastFM extends Plan{
         SendMessagesToNinja(getTopAlbums(url), message);
     }
     public JSONArray getTopAlbums(String source){
-        URL url = null;
-        BufferedReader r = null;
         JSONArray albums = null;
-        try {
-            url = new URL(source);
-            
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-        }
-        try {
-            r = new BufferedReader(new InputStreamReader(url.openStream()));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        JSONObject json = (JSONObject)JSONValue.parse(r);        
+        JSONObject json = UrlManager.getJSONObjFromURL(source); //(JSONObject)JSONValue.parse(r);
+
         if(json.get("error")==null){
             JSONObject topAlbums = (JSONObject)json.get("topalbums");
             if(topAlbums.get("album")==null){
