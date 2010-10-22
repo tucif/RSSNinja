@@ -9,8 +9,9 @@ import jadex.adapter.fipa.SFipa;
 public class Aprendiz extends Plan {
 
     public Aprendiz() {
-        System.out.println("Aprendiz creado");
+        System.out.println("Aprendiz creAprendizado");
     }
+
 
     @Override
     public void body(){
