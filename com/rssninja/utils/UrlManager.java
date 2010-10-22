@@ -19,28 +19,13 @@ import org.json.simple.JSONValue;
  * @author zheroth
  */
 public class UrlManager {
-    public UrlManager(){
-
-    }
 
     public static String getContentFromURL(String urlString){
-        BufferedReader br = null;
-        StringBuilder sb= new StringBuilder("");
-        URL url=null;
-        try {
-            url = new URL(urlString);
-        } catch (MalformedURLException ex) {
-            //TODO: do something when this happens
-            System.out.println("MalformedURL: "+urlString.toString());
-        }
+         StringBuilder sb= new StringBuilder("");
 
+        BufferedReader br=createBufferedReaderFromUrl(urlString);
+        
         try {
-            br= new BufferedReader(new InputStreamReader(url.openStream()));
-        } catch (IOException ex) {
-            //TODO: do something when this happens
-        }
-        try {
-            sb= new StringBuilder("");
             String nextLine="";
             while(true){
                 nextLine=br.readLine();
@@ -49,26 +34,18 @@ public class UrlManager {
                 sb.append(nextLine);
             }
         } catch (IOException ex) {
-            //TODO: do something when this happens
+            //TODO: do something when stringbuilder fails
+            System.out.println("IOException: "+ex);
         }
 
         return sb.toString();
     }
 
     public static JSONArray getJSONArrFromURL(String urlString){
-        URL url=null;
-        BufferedReader br=null;
         JSONArray jsonArray = null;
-        try {
-            url = new URL(urlString);
-        } catch (MalformedURLException ex) {
-            //TODO: do something when this happens
-        }
-        try {
-            br = new BufferedReader(new InputStreamReader(url.openStream()));
-        } catch (IOException ex) {
-            //TODO: do something when this happens
-        }
+
+        BufferedReader br=createBufferedReaderFromUrl(urlString);
+        
         try {
             jsonArray=(JSONArray)JSONValue.parse(br.readLine());
         } catch (IOException ex) {
@@ -79,9 +56,23 @@ public class UrlManager {
     }
 
     public static JSONObject getJSONObjFromURL(String urlString){
+        JSONObject jsonObject = null;
+
+        BufferedReader br=createBufferedReaderFromUrl(urlString);
+        
+        try {
+            jsonObject=(JSONObject)JSONValue.parse(br.readLine());
+        } catch (IOException ex) {
+            //TODO: do something when this happens
+        }
+
+        return jsonObject;
+    }
+
+    private static BufferedReader createBufferedReaderFromUrl(String urlString){
         URL url=null;
         BufferedReader br=null;
-        JSONObject jsonObject = null;
+        
         try {
             url = new URL(urlString);
         } catch (MalformedURLException ex) {
@@ -92,13 +83,7 @@ public class UrlManager {
         } catch (IOException ex) {
             //TODO: do something when this happens
         }
-        try {
-            jsonObject=(JSONObject)JSONValue.parse(br.readLine());
-        } catch (IOException ex) {
-            //TODO: do something when this happens
-        }
-
-        return jsonObject;
+        return br;
     }
 
 }

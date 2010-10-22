@@ -32,9 +32,6 @@ public class AprendizDelicious extends Plan {
         HashMap<String,String> objectToSend=null;
         HashMap<String,String> metaData = null;
 
-
-
-
         for(int i=0; i<jsonArray.size(); i++){
             objectToSend=new HashMap<String,String>();
             currentObject= (JSONObject)jsonArray.get(i);
