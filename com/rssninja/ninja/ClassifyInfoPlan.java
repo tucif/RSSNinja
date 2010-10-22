@@ -6,7 +6,6 @@
 package com.rssninja.ninja;
 
 import jadex.adapter.fipa.AgentIdentifier;
-import jadex.model.jibximpl.Agent;
 import jadex.runtime.*;
 
 /**
