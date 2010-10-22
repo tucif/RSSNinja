@@ -33,15 +33,6 @@ public class Ninja extends Plan{
            String tag = (String)content.get("search");
            sendTagToAll(tag);
         }
-        if(content.containsKey("content")){
-            System.out.println("RECEIVED INFO!!!!!!!!!!!!");
-        }
-    }
-
-    public void analyzeInfo(){
-        IMessageEvent message = (IMessageEvent) getInitialEvent();
-        String contentStr = (String) message.getContent();
-        System.out.println("I received something!!!");
     }
 
     private void sendTagToAll(String tag){

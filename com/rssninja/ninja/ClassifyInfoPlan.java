@@ -5,6 +5,8 @@
 
 package com.rssninja.ninja;
 
+import jadex.adapter.fipa.AgentIdentifier;
+import jadex.model.jibximpl.Agent;
 import jadex.runtime.*;
 
 /**
@@ -20,7 +22,9 @@ public class ClassifyInfoPlan extends Plan{
     public void body(){
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         String contentStr = (String) message.getContent();
-        System.out.println("RECEIVED INFO!!!!!!!!!!!!");
-        
+        IParameter param = (IParameter) message.getParameter("sender");
+        AgentIdentifier agent = (AgentIdentifier)param.getValue();
+        System.out.println("[Ninja] I received a message from : "+agent.getName());
     }
+        
 }
