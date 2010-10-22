@@ -22,8 +22,6 @@ public class AprendizTwitterSearch extends Plan {
         System.out.println("[Ts] Received tag: "+tag);
         String dict = "http://search.twitter.com/search.json?q="+tag;
 
-        //System.out.println("respuesta recibida");
-
         JSONObject response = UrlManager.getJSONObjFromURL(dict);
         JSONArray results = (JSONArray) response.get("results");
 
@@ -32,8 +30,6 @@ public class AprendizTwitterSearch extends Plan {
         JSONObject currentTweet=null;
         
         for(int i = 0; i< results.size(); i++){
-            //System.out.println("[Ts] "+((JSONObject)results.get(i)).get("text"));
-
             objectToSend=new HashMap<String,String>();
             currentTweet= (JSONObject)results.get(i);
 

@@ -25,7 +25,6 @@ public class Ninja extends Plan{
     public void body(){
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         String contentStr = (String) message.getContent();
-        System.out.println(contentStr);
 
         //Json format: {"search":"tag"}
         JSONObject content = (JSONObject)JSONValue.parse(contentStr);
