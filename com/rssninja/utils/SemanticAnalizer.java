@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class SemanticAnalizer {
     
     public static void Analize(String text){
-        String [] words = text.split("\b");
+        String [] words = text.split(" ");
         HashMap<String,Integer> tagCloud = new HashMap<String, Integer>();
         
         int max = 0;
@@ -35,11 +35,13 @@ public class SemanticAnalizer {
         }
         
         ArrayList<String> relatedWords = new ArrayList<String>();
-        int threshold = max/2;
+        int threshold = max/10;
         for(String related : tagCloud.keySet()){
             if(tagCloud.get(related) >= threshold)
                 relatedWords.add(related);
         }
+        System.out.println("Semantic results printing:"+relatedWords.size());
         System.out.println(relatedWords.toString());
+        System.out.println("----------------------------------");
     }    
 }
