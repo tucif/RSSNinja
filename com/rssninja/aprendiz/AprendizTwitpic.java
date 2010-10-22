@@ -27,7 +27,6 @@ public class AprendizTwitpic  extends Plan{
         String tag = (String) message.getContent();
         System.out.println("[Tp] Received tag: "+tag);
         String api = "http://api.twitpic.com/2/tags/show.json?tag="+tag;
-        System.out.println(api);
         SendMessageToNinja(getPictures(api), message);
     }
     /*
@@ -48,7 +47,7 @@ public class AprendizTwitpic  extends Plan{
 
     }
     public void SendMessageToNinja(JSONArray photos,IMessageEvent message){
-        System.out.println("Se va a enviar un mensaje");
+        System.out.println("[Tp] Se va a enviar un mensaje");
         JSONObject objectToSend = null;
         JSONObject metadata = null;
 

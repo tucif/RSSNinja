@@ -52,7 +52,7 @@ public class AprendizDelicious extends Plan {
 
             String metaDataStr = JSONObject.toJSONString(metaData);
             objectToSend.put("meta",metaDataStr);
-            System.out.println("metadata: "+metaDataStr);
+            System.out.println("[De] metadata: "+metaDataStr);
 
             String jsonResult = JSONValue.toJSONString(objectToSend);
 

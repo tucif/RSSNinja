@@ -27,7 +27,7 @@ public class AprendizTwitterSearch extends Plan {
         JSONArray results = (JSONArray) response.get("results");
 
         for(int i = 0; i< results.size(); i++){
-            System.out.println(((JSONObject)results.get(i)).get("text"));
+            System.out.println("[Ts] "+((JSONObject)results.get(i)).get("text"));
             System.out.println();
         }
         //TODO: Send messages back to ninja

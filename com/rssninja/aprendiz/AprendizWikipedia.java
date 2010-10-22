@@ -27,9 +27,9 @@ public class AprendizWikipedia extends Plan {
 
         //generate Meta
         JSONObject metaData=new JSONObject();
-        metaData.put("type","wikitext");
+        metaData.put("type","html");
         objectToSend.put("meta",metaData.toString());
-
+        System.out.println("[Wk] "+objectToSend.toString());
         sendMessage(message.createReply("inform",objectToSend.toString()));
         System.out.println("[Wk] Sent info back to Ninja");
 
