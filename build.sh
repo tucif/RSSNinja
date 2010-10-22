@@ -1,4 +1,4 @@
-javac -cp $CLASSPATH com/rssninja/*.java com/rssninja/aprendiz/*.java
+javac -cp $CLASSPATH com/rssninja/ninja/*.java com/rssninja/aprendiz/*.java 
 echo "Java classes generated"
-jar cvf Aprendiz.jar -C ./ com
+jar cvf RSSNinja.jar -C ./ com
 echo "Jar created!"
