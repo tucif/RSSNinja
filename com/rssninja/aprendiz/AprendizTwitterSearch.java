@@ -3,12 +3,8 @@ package com.rssninja.aprendiz;
 import jadex.runtime.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.*;
-import org.htmlparser.beans.StringBean;
 
 /**
  *
