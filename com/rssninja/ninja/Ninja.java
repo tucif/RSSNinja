@@ -32,6 +32,8 @@ public class Ninja extends Plan{
         if(content.containsKey("search")){
            String tag = (String)content.get("search");
            sendTagToAll(tag);
+        }else{
+            sendMessage(message.createReply("inform","Could not understand: "+message.getContent()));
         }
     }
 

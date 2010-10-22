@@ -32,17 +32,17 @@ public class AprendizTwitterSearch extends Plan {
         JSONObject currentTweet=null;
         
         for(int i = 0; i< results.size(); i++){
-            System.out.println("[Ts] "+((JSONObject)results.get(i)).get("text"));
-            System.out.println();
+            //System.out.println("[Ts] "+((JSONObject)results.get(i)).get("text"));
 
             objectToSend=new HashMap<String,String>();
             currentTweet= (JSONObject)results.get(i);
 
-            //String tweetUrl=
-
-            //objectToSend.put("service","twitter");
-            //objectToSend.put("link",tweetUrl);
-            //objectToSend.put("content",tweetGoesHere);
+            String tweetUrl="www.twitter.com/"+currentTweet.get("from_user")+"/status/"+currentTweet.get("id");
+            String tweetContent=(String)currentTweet.get("text");
+            
+            objectToSend.put("service","twitter");
+            objectToSend.put("link",tweetUrl);
+            objectToSend.put("content",tweetContent);
 
             //generate Meta
             metaData=new HashMap<String,String>();

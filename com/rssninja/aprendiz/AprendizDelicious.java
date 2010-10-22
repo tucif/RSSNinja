@@ -1,6 +1,7 @@
 package com.rssninja.aprendiz;
 
 import com.rssninja.utils.UrlManager;
+import com.rssninja.utils.Crawler;
 import jadex.runtime.*;
 import java.util.HashMap;
 import org.json.simple.*;
@@ -37,11 +38,12 @@ public class AprendizDelicious extends Plan {
             currentObject= (JSONObject)jsonArray.get(i);
 
             urlString= currentObject.get("u").toString();
-
+            String content=Crawler.Crawl(urlString);
+            
             objectToSend.put("service","delicious");
             objectToSend.put("link",urlString);
-            objectToSend.put("content",UrlManager.getContentFromURL(urlString));
-
+            objectToSend.put("content",content);
+            
             //generate Meta
             metaData=new HashMap<String,String>();
 
@@ -52,7 +54,6 @@ public class AprendizDelicious extends Plan {
 
             String metaDataStr = JSONObject.toJSONString(metaData);
             objectToSend.put("meta",metaDataStr);
-            System.out.println("[De] metadata: "+metaDataStr);
 
             String jsonResult = JSONValue.toJSONString(objectToSend);
 
