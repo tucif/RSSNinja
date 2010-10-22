@@ -1,9 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-package com.rssninja;
+package com.rssninja.ninja;
 
 import jadex.adapter.fipa.AgentIdentifier;
 import jadex.runtime.*;
@@ -41,6 +36,12 @@ public class Ninja extends Plan{
         if(content.containsKey("content")){
             System.out.println("RECEIVED INFO!!!!!!!!!!!!");
         }
+    }
+
+    public void analyzeInfo(){
+        IMessageEvent message = (IMessageEvent) getInitialEvent();
+        String contentStr = (String) message.getContent();
+        System.out.println("I received something!!!");
     }
 
     private void sendTagToAll(String tag){
