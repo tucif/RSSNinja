@@ -5,6 +5,7 @@
 
 package com.rssninja.aprendiz;
 
+import com.rssninja.utils.UrlManager;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 import java.io.BufferedReader;
@@ -12,12 +13,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 /**
  *
@@ -42,21 +39,10 @@ public class AprendizTwitpic  extends Plan{
      * return a JSONArray with all the pictures
      */
     public JSONArray getPictures(String url){
-        URL apiURL = null;
-        BufferedReader r = null;
         JSONObject response  = null;
         JSONArray photos = null;
-        try {
-           apiURL = new URL(url);
-        } catch (MalformedURLException ex) {
-           //TODO: do something in case of error
-        }
-        try {
-            r = new BufferedReader(new InputStreamReader(apiURL.openStream()));
-        } catch (IOException ex) {
-           //TODO: Do something in case of error
-        }
-        response = (JSONObject)JSONValue.parse(r);
+
+        response = UrlManager.getJSONObjFromURL(url);
         //verify if images != null
         if(response.get("images") != "null"){
             photos = (JSONArray)response.get("images");
