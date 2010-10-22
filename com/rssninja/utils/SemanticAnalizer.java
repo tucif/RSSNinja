@@ -33,8 +33,9 @@ public class SemanticAnalizer {
         }
         
         ArrayList<String> relatedWords = new ArrayList<String>();
+        int threshold = max/2;
         for(String related : tagCloud.keySet()){
-            if(tagCloud.get(related) >= max)
+            if(tagCloud.get(related) >= threshold)
                 relatedWords.add(related);
         }
         System.out.println(relatedWords.toString());
