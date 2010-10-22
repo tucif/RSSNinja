@@ -16,10 +16,12 @@ import java.util.HashMap;
 public class SemanticAnalizer {
     
     public static void Analize(String text){
-        ArrayList<String> words = (ArrayList<String>) Arrays.asList(text.split("\b"));
+        String [] words = text.split("\b");
         HashMap<String,Integer> tagCloud = new HashMap<String, Integer>();
+        
         int max = 0;
-        for(String w: words){
+        for(int i=0; i< words.length; i++){
+            String w = words[i];
             if(tagCloud.containsKey(w)){
                 int count = tagCloud.get(w)+1;
                 tagCloud.put(w, count);
