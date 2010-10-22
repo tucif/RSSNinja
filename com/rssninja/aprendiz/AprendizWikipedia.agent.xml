@@ -5,19 +5,19 @@ TranslationAgent
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://jadex.sourceforge.net/jadex
 http://jadex.sourceforge.net/jadex-0.96.xsd"
-name="Aprendiz"
-package="com.rssninja">
+name="AprendizWikipedia"
+package="com.rssninja.aprendiz">
 
 	<plans>
 	    <plan name="retrievedata">
 	       <!-- <body class="Aprendiz"></body>-->
-	       	<body>new Aprendiz()</body>
+	       	<body>new AprendizWikipedia()</body>
 			<trigger>
 				<messageevent ref="request_info" />
 			</trigger>
 	    </plan>
 	</plans>
-	
+
 	<events>
 	    <messageevent name="request_info" direction="receive" type="fipa">
 	        <parameter name="performative" class="String" direction="fixed">
