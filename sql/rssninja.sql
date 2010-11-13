@@ -54,6 +54,7 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `RSSNinja`.`link` (
   `id` INT NOT NULL ,
   `value` VARCHAR(500) NULL ,
+  `fecha` VARCHAR(45) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
 
