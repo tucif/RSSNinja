@@ -19,18 +19,66 @@ package="com.rssninja.ninja">
         <achievegoalref name = "ams_create_agent">
             <concrete ref="amscap.ams_create_agent" />
         </achievegoalref>
+        <achievegoal name ="send_links">
+            <unique />
+            <createcondition>
+                $beliefbase.info_updated
+            </createcondition>
+            <deliberation>
+                <inhibits ref="mantain_performance" />
+            </deliberation>
+        </achievegoal>
+        <mantaingoal name="matain_performance">
+            <mantaincondition>
+                $beliefbase.performance &gt;= 0.2
+            </mantaincondition>
+            <targetcondition>
+                $beliefbase.performance &gt;= 0.4
+            </targetcondition>
+        </mantaingoal>
+        <achievegoal name ="update_semantics">
+            <unique />
+            <deliberation>
+                <inhibits ref="send_links" />
+                <inhibits ref="mantain_peformance" />
+            </deliberation>
+        </achievegoal>
+        <achievegoal name ="search_info" retry="">
+            <unique />
+            <createcondition>
+                $beliefbase.time_since_last_update &gt;= $beliefbase.update_interval;
+            </createcondition>
+            <deliberation>
+                <inhibits ref="mantain_performance" />
+                <inhibits ref="send_links" />
+            </deliberation>
+        </achievegoal>
     </goals>
     <plans>
+        <plan name = "send_info">
+            <body> new SendInfoToSensei() </body> <!--TODO -->
+            <trigger>
+               <goal ref="send_links" />
+            </trigger>
+        </plan>
+        <plan name ="analyzeInfo">
+            <body>new ClassifyInfoPlan()</body> <!--TODO-->
+            <trigger>
+                <messageevent ref="inform" />
+                <goal ref="update_semantics" />
+            </trigger>
+        </plan>
+        <plan name ="search_database">
+            <body> new SearchDatabase()</body> <!--TODO-->
+            <trigger>
+                <goal ref="search_info" />
+            </trigger>
+        </plan>
         <plan name = "getinfo">
             <body>new Ninja()</body>
             <trigger>
                 <messageevent ref="pull"/>
-            </trigger>
-        </plan>
-        <plan name ="analyzeInfo">
-            <body>new ClassifyInfoPlan()</body>
-            <trigger>
-                <messageevent ref="inform" />
+                <goal ref="search_info" />
             </trigger>
         </plan>
     </plans>
@@ -51,4 +99,29 @@ package="com.rssninja.ninja">
             </parameter>
         </messageevent>
     </events>
+    <beliefs>
+        <belief name="tag" class="String">
+            <fact>""</fact>
+        </belief>            
+        <beliefset name="related_links" class="String">
+            <facts evaluationmode="dynamic">
+                Database.getRelatedLinks(getBeliefbase().getBelief("tag"))
+            </facts>
+        </beliefset>
+        <belief name="sensei" class="AgentIdentifier">
+            <fact>""</fact>
+        </belief>
+        <belief name="performance" class="Float">
+            <fact>3.0</fact>
+        </belief>
+        <belief name="last_update" class="long">
+            <fact> 0 </fact>
+        </belief>
+        <belief name="info_updated" class="boolean">
+            <fact> false </fact>
+        </belief>
+        <belief name="update_interval" class="long">
+            <fact>5*60*1000</fact><!-- quitar numeros magicos -->
+        </belief>
+    </beliefs>
 </agent>

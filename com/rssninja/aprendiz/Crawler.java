@@ -11,7 +11,6 @@ public class Crawler extends Plan {
 
     public Crawler() {
         System.out.println("Crawler creado");
-
     }
 
     @Override
