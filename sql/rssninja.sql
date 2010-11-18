@@ -119,6 +119,7 @@ CREATE  TABLE IF NOT EXISTS `RSSNinja`.`Semantic` (
   `id` INT NOT NULL ,
   `word1` INT NULL ,
   `word2` INT NULL ,
+  `relation_factor` FLOAT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_Semantic_1` (`word1` ASC) ,
   INDEX `fk_Semantic_2` (`word2` ASC) ,
