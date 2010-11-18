@@ -61,7 +61,7 @@ package="com.rssninja.ninja">
                <goal ref="send_links" />
             </trigger>
         </plan>
-        <plan name ="analyzeInfo">
+        <plan name ="analyze_info">
             <body>new ClassifyInfoPlan()</body> <!--TODO-->
             <trigger>
                 <messageevent ref="inform" />
