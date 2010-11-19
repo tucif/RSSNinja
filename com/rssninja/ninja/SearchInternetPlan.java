@@ -1,8 +1,11 @@
 package com.rssninja.ninja;
 
+import com.rssninja.utils.Database;
 import jadex.adapter.fipa.AgentIdentifier;
 import jadex.runtime.*;
 import jadex.adapter.fipa.SFipa;
+import jadex.model.IMBelief;
+import jadex.model.IMBeliefbase;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -30,10 +33,17 @@ public class SearchInternetPlan extends Plan{
         JSONObject content = (JSONObject)JSONValue.parse(contentStr);
         if(content.containsKey("search")){
            String tag = (String)content.get("search");
+           registerTagBelief(tag);
+           
            sendTagToAll(tag);
         }else{
             sendMessage(message.createReply("informSend","Could not understand: "+message.getContent()));
         }
+    }
+
+    private void registerTagBelief(String tag){
+        getBeliefbase().getBelief("tag").setFact(tag);
+        Database.INSTANCE.insertWord(tag);
     }
 
     private void sendTagToAll(String tag){

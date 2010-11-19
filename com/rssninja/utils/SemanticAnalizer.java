@@ -16,14 +16,14 @@ import java.util.HashMap;
  */
 public class SemanticAnalizer {
     
-    public static HashMap<String,Integer> Analize(String text){
+    public static synchronized HashMap<String,Integer> Analize(String text){
         String [] words = text.split(" ");
         HashMap<String,Integer> tagCloud = new HashMap<String, Integer>();
         
         int max = 0;
         for(int i=0; i< words.length; i++){
             String w = words[i];
-            if(isPreposition(w)){
+            if(isPreposition(w)){                
                 continue;
             }
 
@@ -39,11 +39,13 @@ public class SemanticAnalizer {
             }
         }
         
-        //ArrayList<String> relatedWords = new ArrayList<String>();
-        int threshold = max/10;
-        for(String related : tagCloud.keySet()){
+        ArrayList<String> relatedWords = new ArrayList<String>();
+        int threshold = 1 + max/10;
+        relatedWords.addAll(tagCloud.keySet());
+        for(String related : relatedWords){
             if(tagCloud.get(related) < threshold){
                 //relatedWords.add(related);
+                System.out.println("NOT RELATED:  ("+tagCloud.get(related)+") - "+related);
                 tagCloud.remove(related);
             }
         }
