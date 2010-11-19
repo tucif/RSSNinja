@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import com.rssninja.utils.SemanticAnalizer;
+import java.util.HashMap;
 
 /**
  *
@@ -33,7 +34,11 @@ public class ClassifyInfoPlan extends Plan{
         System.out.println("[Ninja] I received a message from : "+agent.getName());
         System.out.println("[Ninja] Message: "+messageContent);
         System.out.println("[Ninja] Semantic Analysis:");
-        SemanticAnalizer.Analize(messageContent);
+        HashMap<String,Integer> semanticResults = SemanticAnalizer.Analize(messageContent);
+        //Hacer conexion a BD y meter
+        //words (semanticResults.keys())
+        //y cada word con Keyword en Semantic
+        //con iteration factor de semanticResults[word]
     }
         
 }
