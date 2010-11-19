@@ -5,6 +5,8 @@
 
 package com.rssninja.ninja;
 
+import com.rssninja.models.Word;
+import com.rssninja.utils.Database;
 import jadex.adapter.fipa.AgentIdentifier;
 import jadex.runtime.*;
 import org.json.simple.JSONObject;
@@ -27,6 +29,11 @@ public class ClassifyInfoPlan extends Plan{
         IMessageEvent message = (IMessageEvent) getInitialEvent();
         JSONObject json = (JSONObject) JSONValue.parse((String)message.getContent());
         IParameter param = (IParameter) message.getParameter("sender");
+
+        IBelief tagBelief = getBeliefbase().getBelief("tag");
+        String tagStr = (String) tagBelief.getFact();
+
+        Word tagWord = Database.INSTANCE.getWord(tagStr);
         
         AgentIdentifier agent = (AgentIdentifier)param.getValue();
         String messageContent=(String)json.get("content");
@@ -39,6 +46,14 @@ public class ClassifyInfoPlan extends Plan{
         //words (semanticResults.keys())
         //y cada word con Keyword en Semantic
         //con iteration factor de semanticResults[word]
+        for(String word : semanticResults.keySet()){
+            Word relatedWord = Database.INSTANCE.insertWord(word);
+            if(relatedWord ==null){
+                System.out.println("NULL");
+                continue;
+            }
+            Database.INSTANCE.insertSemantic(tagWord,relatedWord,semanticResults.get(word));
+        }
     }
         
 }

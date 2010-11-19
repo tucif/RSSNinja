@@ -17,7 +17,7 @@ package="com.rssninja.ninja">
     </capabilities>
     <beliefs>
         <belief name="tag" class="String">
-            <fact>""</fact>
+            <fact>"Beatles"</fact>
         </belief>
         <beliefset name="related_links" class="String">
             <facts evaluationmode="dynamic">
@@ -117,7 +117,7 @@ package="com.rssninja.ninja">
         <messageevent name ="informReceive" direction = "receive" type="fipa">
             <parameter name="performative" class="String" direction = "fixed">
                 <value>jadex.adapter.fipa.SFipa.INFORM</value>
-            </parameter>
+            </parameter>            
         </messageevent>
          <messageevent name ="informSend" direction = "send" type="fipa">
             <parameter name="performative" class="String" direction = "fixed">
