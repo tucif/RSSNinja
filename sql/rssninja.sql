@@ -70,11 +70,17 @@ CREATE  TABLE IF NOT EXISTS `RSSNinja`.`knowledge` (
   `relevancia` INT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_knowledge_1` (`link` ASC) ,
+  INDEX `fk_knowledge_2` (`keyword` ASC) ,
   CONSTRAINT `fk_knowledge_1`
     FOREIGN KEY (`link` )
     REFERENCES `RSSNinja`.`link` (`id` )
     ON DELETE CASCADE
-    ON UPDATE CASCADE)
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_knowledge_2`
+    FOREIGN KEY (`keyword` )
+    REFERENCES `RSSNinja`.`keyword` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
