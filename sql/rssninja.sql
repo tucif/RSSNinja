@@ -55,7 +55,14 @@ CREATE  TABLE IF NOT EXISTS `RSSNinja`.`link` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `value` VARCHAR(500) NULL ,
   `fecha` VARCHAR(45) NULL ,
-  PRIMARY KEY (`id`) )
+  `keyword_id` INT NULL ,
+  PRIMARY KEY (`id`) ,
+  INDEX `fk_link_1` (`keyword_id` ASC) ,
+  CONSTRAINT `fk_link_1`
+    FOREIGN KEY (`keyword_id` )
+    REFERENCES `RSSNinja`.`keyword` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -65,22 +72,15 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `RSSNinja`.`knowledge` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `link` INT NULL ,
-  `keyword` INT NULL ,
   `servicio` VARCHAR(100) NULL ,
   `relevancia` INT NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `fk_knowledge_1` (`link` ASC) ,
-  INDEX `fk_knowledge_2` (`keyword` ASC) ,
   CONSTRAINT `fk_knowledge_1`
     FOREIGN KEY (`link` )
     REFERENCES `RSSNinja`.`link` (`id` )
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_knowledge_2`
-    FOREIGN KEY (`keyword` )
-    REFERENCES `RSSNinja`.`keyword` (`id` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -114,7 +114,8 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `RSSNinja`.`word` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `value` VARCHAR(100) NULL ,
-  PRIMARY KEY (`id`) )
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `value_UNIQUE` (`value` ASC) )
 ENGINE = InnoDB;
 
 
