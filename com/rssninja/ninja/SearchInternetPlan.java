@@ -10,15 +10,15 @@ import org.json.simple.JSONValue;
  *
  * @author unicorn
  */
-public class Ninja extends Plan{
+public class SearchInternetPlan extends Plan{
 
     private static String[] APPRENTICE_ARRAY={  "Delicious",
                                                 "LastFM",
                                                 "Twitpic",
                                                 "TwitterSearch",
                                                 "Wikipedia"};
-    public Ninja() {
-        System.out.println("Ninja creado");
+    public SearchInternetPlan() {
+        System.out.println("Buscando en internet");
     }
     
     @Override
@@ -32,7 +32,7 @@ public class Ninja extends Plan{
            String tag = (String)content.get("search");
            sendTagToAll(tag);
         }else{
-            sendMessage(message.createReply("inform","Could not understand: "+message.getContent()));
+            sendMessage(message.createReply("informSend","Could not understand: "+message.getContent()));
         }
     }
 
@@ -42,7 +42,7 @@ public class Ninja extends Plan{
         ime.setContent(tag);
 
         //Add receivers to message
-        for(String name:Ninja.APPRENTICE_ARRAY){
+        for(String name:SearchInternetPlan.APPRENTICE_ARRAY){
             String path="com.rssninja.aprendiz.Aprendiz"+name;
             IGoal ca = createGoal("ams_create_agent");
             ca.getParameter("type").setValue(path);

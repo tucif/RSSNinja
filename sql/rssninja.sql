@@ -9,7 +9,7 @@ USE `RSSNinja` ;
 -- Table `RSSNinja`.`user`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `RSSNinja`.`user` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `username` VARCHAR(100) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
@@ -19,7 +19,7 @@ ENGINE = InnoDB;
 -- Table `RSSNinja`.`keyword`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `RSSNinja`.`keyword` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `value` VARCHAR(100) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
@@ -29,7 +29,7 @@ ENGINE = InnoDB;
 -- Table `RSSNinja`.`user_keyword`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `RSSNinja`.`user_keyword` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `user_id` INT NULL ,
   `keyword_id` INT NULL ,
   PRIMARY KEY (`id`) ,
@@ -52,7 +52,7 @@ ENGINE = InnoDB;
 -- Table `RSSNinja`.`link`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `RSSNinja`.`link` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `value` VARCHAR(500) NULL ,
   `fecha` VARCHAR(45) NULL ,
   PRIMARY KEY (`id`) )
@@ -63,7 +63,7 @@ ENGINE = InnoDB;
 -- Table `RSSNinja`.`knowledge`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `RSSNinja`.`knowledge` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `link` INT NULL ,
   `keyword` INT NULL ,
   `servicio` VARCHAR(100) NULL ,
@@ -82,7 +82,7 @@ ENGINE = InnoDB;
 -- Table `RSSNinja`.`knowledge_user`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `RSSNinja`.`knowledge_user` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `id_knowledge` INT NULL ,
   `id_user` INT NULL ,
   `rating` INT NULL ,
@@ -106,7 +106,7 @@ ENGINE = InnoDB;
 -- Table `RSSNinja`.`word`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `RSSNinja`.`word` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `value` VARCHAR(100) NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB;
@@ -116,7 +116,7 @@ ENGINE = InnoDB;
 -- Table `RSSNinja`.`Semantic`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `RSSNinja`.`Semantic` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `word1` INT NULL ,
   `word2` INT NULL ,
   `relation_factor` FLOAT NULL ,
