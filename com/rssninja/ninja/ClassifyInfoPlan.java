@@ -42,14 +42,10 @@ public class ClassifyInfoPlan extends Plan{
         System.out.println("[Ninja] Message: "+messageContent);
         System.out.println("[Ninja] Semantic Analysis:");
         HashMap<String,Integer> semanticResults = SemanticAnalizer.Analize(messageContent);
-        //Hacer conexion a BD y meter
-        //words (semanticResults.keys())
-        //y cada word con Keyword en Semantic
-        //con iteration factor de semanticResults[word]
+        
         for(String word : semanticResults.keySet()){
             Word relatedWord = Database.INSTANCE.insertWord(word);
-            if(relatedWord ==null){
-                System.out.println("NULL");
+            if(relatedWord ==null){                
                 continue;
             }
             Database.INSTANCE.insertSemantic(tagWord,relatedWord,semanticResults.get(word));
