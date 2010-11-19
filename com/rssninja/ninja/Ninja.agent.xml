@@ -15,67 +15,93 @@ package="com.rssninja.ninja">
     <capabilities>
         <capability name="amscap" file="jadex.planlib.AMS" />
     </capabilities>
+    <beliefs>
+        <belief name="tag" class="String">
+            <fact>""</fact>
+        </belief>
+        <beliefset name="related_links" class="String">
+            <facts evaluationmode="dynamic">
+                Null
+                <!--Database.getRelatedLinks(getBeliefbase().getBelief("tag"))-->
+            </facts>
+        </beliefset>
+        <belief name="sensei" class="String">
+            <fact>"GenericSensei"</fact>
+        </belief>
+        <belief name="performance" class="Float">
+            <fact>3.0F</fact>
+        </belief>
+        <belief name="time_since_last_update" class="long">
+            <fact> 0L </fact>
+        </belief>
+        <belief name="info_updated" class="boolean">
+            <fact> false </fact>
+        </belief>
+        <belief name="update_interval" class="long">
+            <fact>5*60*1000L</fact><!-- quitar numeros magicos -->
+        </belief>
+    </beliefs>
     <goals>
         <achievegoalref name = "ams_create_agent">
             <concrete ref="amscap.ams_create_agent" />
         </achievegoalref>
         <achievegoal name ="send_links">
-            <unique />
-            <createcondition>
+            <unique/>
+            <creationcondition>
                 $beliefbase.info_updated
-            </createcondition>
+            </creationcondition>
             <deliberation>
-                <inhibits ref="mantain_performance" />
+                <inhibits ref="maintain_performance" />
             </deliberation>
         </achievegoal>
-        <mantaingoal name="matain_performance">
-            <mantaincondition>
+        <maintaingoal name="maintain_performance">
+            <maintaincondition>
                 $beliefbase.performance &gt;= 0.2
-            </mantaincondition>
+            </maintaincondition>
             <targetcondition>
                 $beliefbase.performance &gt;= 0.4
             </targetcondition>
-        </mantaingoal>
+        </maintaingoal>
         <achievegoal name ="update_semantics">
             <unique />
             <deliberation>
                 <inhibits ref="send_links" />
-                <inhibits ref="mantain_peformance" />
+                <inhibits ref="maintain_performance" />
             </deliberation>
         </achievegoal>
-        <achievegoal name ="search_info" retry="">
+        <achievegoal name ="search_info">
             <unique />
-            <createcondition>
-                $beliefbase.time_since_last_update &gt;= $beliefbase.update_interval;
-            </createcondition>
+            <creationcondition>
+                $beliefbase.time_since_last_update &gt;= $beliefbase.update_interval
+            </creationcondition>
             <deliberation>
-                <inhibits ref="mantain_performance" />
+                <inhibits ref="maintain_performance" />
                 <inhibits ref="send_links" />
             </deliberation>
         </achievegoal>
     </goals>
     <plans>
         <plan name = "send_info">
-            <body> new SendInfoToSensei() </body> <!--TODO -->
+            <body> null <!--new SendInfoToSensei()--> </body>
             <trigger>
                <goal ref="send_links" />
             </trigger>
         </plan>
         <plan name ="analyzeInfo">
-            <body>new ClassifyInfoPlan()</body> <!--TODO-->
+            <body>new ClassifyInfoPlan()</body>
             <trigger>
-                <messageevent ref="inform" />
+                <messageevent ref="informReceive" />
                 <goal ref="update_semantics" />
             </trigger>
         </plan>
         <plan name ="search_database">
-            <body> new SearchDatabase()</body> <!--TODO-->
+            <body>null <!--new SearchDatabase()--></body>
             <trigger>
                 <goal ref="search_info" />
             </trigger>
         </plan>
-        <plan name = "getinfo">
-            <body>new Ninja()</body>
+        <plan name = "get_info">
+            <body>new SearchInternetPlan()</body>
             <trigger>
                 <messageevent ref="pull"/>
                 <goal ref="search_info" />
@@ -88,7 +114,12 @@ package="com.rssninja.ninja">
                 <value>jadex.adapter.fipa.SFipa.REQUEST</value>
             </parameter>
         </messageevent>
-        <messageevent name ="inform" direction = "receive" type="fipa">
+        <messageevent name ="informReceive" direction = "receive" type="fipa">
+            <parameter name="performative" class="String" direction = "fixed">
+                <value>jadex.adapter.fipa.SFipa.INFORM</value>
+            </parameter>
+        </messageevent>
+         <messageevent name ="informSend" direction = "send" type="fipa">
             <parameter name="performative" class="String" direction = "fixed">
                 <value>jadex.adapter.fipa.SFipa.INFORM</value>
             </parameter>
@@ -99,29 +130,4 @@ package="com.rssninja.ninja">
             </parameter>
         </messageevent>
     </events>
-    <beliefs>
-        <belief name="tag" class="String">
-            <fact>""</fact>
-        </belief>            
-        <beliefset name="related_links" class="String">
-            <facts evaluationmode="dynamic">
-                Database.getRelatedLinks(getBeliefbase().getBelief("tag"))
-            </facts>
-        </beliefset>
-        <belief name="sensei" class="AgentIdentifier">
-            <fact>""</fact>
-        </belief>
-        <belief name="performance" class="Float">
-            <fact>3.0</fact>
-        </belief>
-        <belief name="last_update" class="long">
-            <fact> 0 </fact>
-        </belief>
-        <belief name="info_updated" class="boolean">
-            <fact> false </fact>
-        </belief>
-        <belief name="update_interval" class="long">
-            <fact>5*60*1000</fact><!-- quitar numeros magicos -->
-        </belief>
-    </beliefs>
 </agent>
