@@ -10,8 +10,8 @@ import java.util.List;
 public class Database {
 
     public static Database INSTANCE = new Database();
-    private  String userName = "root";
-    private String password = "";
+    private  String userName = "dev";
+    private String password = "secreto";
     private String dbms = "mysql";
     private String serverName = "localhost";
     private String portNumber = "3306";
@@ -19,6 +19,8 @@ public class Database {
     private final String insertWordSQL = "INSERT INTO word (value) VALUES (?)";
     private final String selectWordSQL = "SELECT * FROM word WHERE value = ?";
     private final String insertSemanticSQL = "INSERT INTO Semantic (word1,word2,relation_factor) VALUES (?,?,?)";
+    private final String selectSemanticSQL = "SELECT * FROM Semantic WHERE word1 = ? AND word2 = ?";
+    private final String updateSemanticSQL = "UPDATE Semantic SET relation_factor = ? WHERE word1 = ? AND word2 = ?";
     private final String insertKeywordSQL = "INSERT INTO Keyword (value) values(?)";
     private final String insertLinkSQL = "INSERT INTO link (value,fecha) values(?,?)";
     private final String insertKnowledgeSQL = "INSERT INTO knowledge (link,keyword,servicio,relevancia) values(?,?,?,?)";
@@ -51,9 +53,9 @@ public class Database {
         }catch(Exception e){
             System.out.println("Another Exception!!");
         }
-        if(conn != null)
-            System.out.println("Connected to database");
-        
+        if(conn != null){
+            //System.out.println("Connected to database");
+        }
         return conn;
     }
 
@@ -61,6 +63,10 @@ public class Database {
      * Inserts a word object in DB and returns the auto generated ID for that word
      */
     public Word insertWord(String word){
+        Word wDB = getWord(word);
+        if( wDB != null){
+            return wDB;
+        }
         PreparedStatement st = null;
         Connection c = null;
         int autoID = -1;
@@ -75,7 +81,7 @@ public class Database {
             }else {
                     throw new SQLException("Row not inserted");
             }            
-            System.out.println("AutoID: "+autoID);
+//            System.out.println("AutoID: "+autoID);
             rs.close();
             rs = null;
         }catch(SQLException e){
@@ -132,6 +138,10 @@ public class Database {
     }
 
     public Semantic insertSemantic(Word word1, Word word2, float relation_factor){
+        Semantic sDB = getSemantic(word1, word2);
+        if(sDB != null){
+            return updateSemantic(sDB, relation_factor);
+        }
         int autoID = -1;
 
         PreparedStatement st = null;
@@ -173,33 +183,96 @@ public class Database {
         return new Semantic(autoID,word1, word2, relation_factor);
     }
 
-public Keyword insertKeyword(String value){
-    PreparedStatement iK = null;
-    Connection c = null;
-     int autoID = -1;
-     try {
-            c = getConnection();
-            iK = c.prepareStatement(insertKeywordSQL, Statement.RETURN_GENERATED_KEYS);
-            iK.setString(1, value);
-            iK.executeUpdate();
-            ResultSet keys = iK.getGeneratedKeys();
-            if(keys.next()){
-                autoID = keys.getInt(1);
-            }else{
-                System.out.println("Can't insert the keyword");
+    public Semantic getSemantic(Word word1, Word word2){
+        Semantic s = null;
+        PreparedStatement st = null;
+        Connection c = null;
+        try{
+            c= getConnection();
+            st = c.prepareStatement(selectSemanticSQL, Statement.RETURN_GENERATED_KEYS);
+            st.setInt(1, word1.getId());
+            st.setInt(2, word2.getId());            
+            ResultSet rs = st.executeQuery();
+            if(rs.next()){
+                s = new Semantic(rs.getInt(1), word1, word2, rs.getFloat(4));
             }
-            keys.close();
-            keys = null;
-        } catch (SQLException e) {
+            rs.close();
+            rs = null;
+        }catch(SQLException e){
             e.printStackTrace();
         }finally{
-            try {
-             iK.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            try{
+            st.close();
+            }catch(SQLException e){
+              e.printStackTrace();
+            }finally{
+                try{
+                c.close();
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
             }
         }
-        return new Keyword(autoID, value);
+        return s;
+    }
+
+    public Semantic updateSemantic(Semantic sem, float newRelationFactor){
+        PreparedStatement st = null;
+        Connection c = null;
+        try{
+            c= getConnection();
+            st = c.prepareStatement(updateSemanticSQL);
+            st.setFloat(1, sem.getRelation_factor() + newRelationFactor);
+            st.setInt(2, sem.getWord1().getId());
+            st.setInt(3, sem.getWord2().getId());
+            st.executeUpdate();
+            sem.setRelation_factor(sem.getRelation_factor() + newRelationFactor);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            try{
+            st.close();
+            }catch(SQLException e){
+              e.printStackTrace();
+            }finally{
+                try{
+                c.close();
+                }catch(SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sem;
+    }
+
+
+    public Keyword insertKeyword(String value){
+        PreparedStatement iK = null;
+        Connection c = null;
+        int autoID = -1;
+        try {
+               c = getConnection();
+               iK = c.prepareStatement(insertKeywordSQL, Statement.RETURN_GENERATED_KEYS);
+               iK.setString(1, value);
+               iK.executeUpdate();
+               ResultSet keys = iK.getGeneratedKeys();
+               if(keys.next()){
+                   autoID = keys.getInt(1);
+               }else{
+                   System.out.println("Can't insert the keyword");
+               }
+               keys.close();
+               keys = null;
+           } catch (SQLException e) {
+               e.printStackTrace();
+           }finally{
+               try {
+                iK.close();
+               } catch (SQLException e) {
+                   e.printStackTrace();
+               }
+           }
+           return new Keyword(autoID, value);
     }
 public Link insertLink(String value,String fecha){
     PreparedStatement iL = null;

@@ -22,8 +22,8 @@ public class SemanticAnalizer {
         
         int max = 0;
         for(int i=0; i< words.length; i++){
-            String w = words[i];
-            if(isPreposition(w)){                
+            String w = words[i].trim();
+            if(isPreposition(w)){ //w.isEmpty() || 
                 continue;
             }
 
@@ -43,27 +43,26 @@ public class SemanticAnalizer {
         int threshold = 1 + max/10;
         relatedWords.addAll(tagCloud.keySet());
         for(String related : relatedWords){
-            if(tagCloud.get(related) < threshold){
-                //relatedWords.add(related);
-                System.out.println("NOT RELATED:  ("+tagCloud.get(related)+") - "+related);
+            if(tagCloud.get(related) < threshold){         
+                System.out.println("NOT RELATED:  ("+tagCloud.get(related)+"/"+max+":"+threshold+") - "+related);
                 tagCloud.remove(related);
             }
-        }
-        //System.out.println("Semantic results printing:"+relatedWords.size());
-        //System.out.println(relatedWords.toString());
-        //System.out.println("----------------------------------");
+        }       
         return tagCloud;
         
     }
 
     public static boolean isPreposition(String related){
-
         return Collections.binarySearch(prepositions, related)!= -1;
-        
     }
 
 
     private static final String [] prepos = {
+        //"&",
+        //"-",
+        //"/",
+        "a",
+        "an",
         "aboard",
         "about",
         "above",
@@ -108,11 +107,16 @@ public class SemanticAnalizer {
         "for",
         "from",
         "given",
+        "i",
+        //"i'm",
+        "if",
         "in",
         "including",
         "inside",
         "into",
+        "is",
         "like",
+        "my",
         "mid",
         "midst",
         "minus",
@@ -137,6 +141,7 @@ public class SemanticAnalizer {
         "round",
         "save",
         "since",
+        "the",
         "than",
         "through",
         "thru",
@@ -153,10 +158,12 @@ public class SemanticAnalizer {
         "until",
         "up",
         "upon",
-        "versus",
-        "vs",
+        "versus",       
         "via",
         "vice",
+        "vs",
+        "what",
+        "which",
         "with",
         "within",
         "without",
