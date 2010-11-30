@@ -16,14 +16,14 @@ import java.util.HashMap;
  */
 public class SemanticAnalizer {
     
-    public static synchronized HashMap<String,Integer> Analize(String text){
+    public static synchronized HashMap<String,Integer> Analize(String text, String ignoredWord){
         String [] words = text.split(" ");
         HashMap<String,Integer> tagCloud = new HashMap<String, Integer>();
         
         int max = 0;
         for(int i=0; i< words.length; i++){
-            String w = words[i];
-            if(isPreposition(w)){                
+            String w = stripSymbols(words[i]).trim();
+            if(isPreposition(w) || isDigit(w) || w.isEmpty() || w.toLowerCase().equals(ignoredWord.toLowerCase())){ //w.isEmpty() ||
                 continue;
             }
 
@@ -43,27 +43,43 @@ public class SemanticAnalizer {
         int threshold = 1 + max/10;
         relatedWords.addAll(tagCloud.keySet());
         for(String related : relatedWords){
-            if(tagCloud.get(related) < threshold){
-                //relatedWords.add(related);
-                System.out.println("NOT RELATED:  ("+tagCloud.get(related)+") - "+related);
+            if(tagCloud.get(related) < threshold){         
+                System.out.println("NOT RELATED:  ("+tagCloud.get(related)+"/"+max+":"+threshold+") - "+related);
                 tagCloud.remove(related);
             }
-        }
-        //System.out.println("Semantic results printing:"+relatedWords.size());
-        //System.out.println(relatedWords.toString());
-        //System.out.println("----------------------------------");
+        }       
         return tagCloud;
         
     }
 
-    public static boolean isPreposition(String related){
-
-        return Collections.binarySearch(prepositions, related)!= -1;
-        
+    public static String stripSymbols(String related){
+        StringBuilder sb = new StringBuilder();
+        for(int i= 0; i< related.length(); i++){
+            if(symbols.contains(related.charAt(i))){
+                sb.append(" ");
+            }else{
+                sb.append(related.charAt(i));
+            }
+        }
+        return sb.toString();
     }
 
+    public static boolean isPreposition(String related){
+        return Collections.binarySearch(prepositions, related)!= -1;
+    }
+    public static boolean isDigit(String rel){
+        return rel.length() == 1 && Character.isDigit(rel.charAt(0));
+    }   
+
+    private static final Character[] symbArr = {'&','\"','-',',','(',')','.','=','\\',':','/','?','*','!',';',']','[','_'};
+    
 
     private static final String [] prepos = {
+        //"&",
+        //"-",
+        //"/",
+        "a",
+        "an",
         "aboard",
         "about",
         "above",
@@ -108,11 +124,16 @@ public class SemanticAnalizer {
         "for",
         "from",
         "given",
+        "i",
+        //"i'm",
+        "if",
         "in",
         "including",
         "inside",
         "into",
+        "is",
         "like",
+        "my",
         "mid",
         "midst",
         "minus",
@@ -137,6 +158,7 @@ public class SemanticAnalizer {
         "round",
         "save",
         "since",
+        "the",
         "than",
         "through",
         "thru",
@@ -153,10 +175,12 @@ public class SemanticAnalizer {
         "until",
         "up",
         "upon",
-        "versus",
-        "vs",
+        "versus",       
         "via",
         "vice",
+        "vs",
+        "what",
+        "which",
         "with",
         "within",
         "without",
@@ -165,5 +189,9 @@ public class SemanticAnalizer {
     private static final ArrayList<String> prepositions = new ArrayList<String>(100);
     static{
         prepositions.addAll(Arrays.asList(prepos));
+    }
+    private static final ArrayList<Character> symbols = new ArrayList<Character>(25);
+    static{
+        symbols.addAll(Arrays.asList(symbArr));
     }
 }

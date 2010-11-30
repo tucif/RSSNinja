@@ -41,7 +41,7 @@ public class ClassifyInfoPlan extends Plan{
         System.out.println("[Ninja] I received a message from : "+agent.getName());
         System.out.println("[Ninja] Message: "+messageContent);
         System.out.println("[Ninja] Semantic Analysis:");
-        HashMap<String,Integer> semanticResults = SemanticAnalizer.Analize(messageContent);
+        HashMap<String,Integer> semanticResults = SemanticAnalizer.Analize(messageContent, tagStr);
         
         for(String word : semanticResults.keySet()){
             Word relatedWord = Database.INSTANCE.insertWord(word);
