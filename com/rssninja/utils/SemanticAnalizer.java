@@ -16,14 +16,14 @@ import java.util.HashMap;
  */
 public class SemanticAnalizer {
     
-    public static synchronized HashMap<String,Integer> Analize(String text){
+    public static synchronized HashMap<String,Integer> Analize(String text, String ignoredWord){
         String [] words = text.split(" ");
         HashMap<String,Integer> tagCloud = new HashMap<String, Integer>();
         
         int max = 0;
         for(int i=0; i< words.length; i++){
-            String w = words[i].trim();
-            if(isPreposition(w)){ //w.isEmpty() || 
+            String w = stripSymbols(words[i]).trim();
+            if(isPreposition(w) || isDigit(w) || w.isEmpty() || w.toLowerCase().equals(ignoredWord.toLowerCase())){ //w.isEmpty() ||
                 continue;
             }
 
@@ -52,10 +52,27 @@ public class SemanticAnalizer {
         
     }
 
+    public static String stripSymbols(String related){
+        StringBuilder sb = new StringBuilder();
+        for(int i= 0; i< related.length(); i++){
+            if(symbols.contains(related.charAt(i))){
+                sb.append(" ");
+            }else{
+                sb.append(related.charAt(i));
+            }
+        }
+        return sb.toString();
+    }
+
     public static boolean isPreposition(String related){
         return Collections.binarySearch(prepositions, related)!= -1;
     }
+    public static boolean isDigit(String rel){
+        return rel.length() == 1 && Character.isDigit(rel.charAt(0));
+    }   
 
+    private static final Character[] symbArr = {'&','\"','-',',','(',')','.','=','\\',':','/','?','*','!',';',']','[','_'};
+    
 
     private static final String [] prepos = {
         //"&",
@@ -172,5 +189,9 @@ public class SemanticAnalizer {
     private static final ArrayList<String> prepositions = new ArrayList<String>(100);
     static{
         prepositions.addAll(Arrays.asList(prepos));
+    }
+    private static final ArrayList<Character> symbols = new ArrayList<Character>(25);
+    static{
+        symbols.addAll(Arrays.asList(symbArr));
     }
 }
