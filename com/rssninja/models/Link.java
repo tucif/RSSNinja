@@ -11,6 +11,7 @@ package com.rssninja.models;
  */
 public class Link {
     private int id;
+    private Keyword keyword;
     private String value;
     private String date;
 
@@ -23,8 +24,9 @@ public class Link {
     }
 
 
-    public Link(int id,String value,String date){
+    public Link(int id,Keyword keyword,String value,String date){
         this.id = id;
+        this.keyword = keyword;
         this.value = value;
         this.date = date;
     }
@@ -44,8 +46,15 @@ public class Link {
     public void setValue(String value) {
         this.value = value;
     }
+    public Keyword getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(Keyword keyword) {
+        this.keyword = keyword;
+    }
     @Override
     public String toString(){
-        return "Link : "+this.value+" and Date "+this.date;
+        return "Link : "+this.value+" and Date "+this.date+" keyword: "+this.keyword;
     }
 }

@@ -40,6 +40,9 @@ package="com.rssninja.ninja">
         <belief name="update_interval" class="long">
             <fact>5*60*1000L</fact><!-- quitar numeros magicos -->
         </belief>
+        <beliefset name ="new_links" class="java.util.ArrayList">
+            <facts>null</facts>
+        </beliefset>
     </beliefs>
     <goals>
         <achievegoalref name = "ams_create_agent">
@@ -95,7 +98,7 @@ package="com.rssninja.ninja">
             </trigger>
         </plan>
         <plan name ="search_database">
-            <body>null <!--new SearchDatabase()--></body>
+            <body>new SearchDatabase()</body>
             <trigger>
                 <goal ref="search_info" />
             </trigger>

@@ -9,9 +9,10 @@ import jadex.adapter.fipa.AgentIdentifier;
 import jadex.runtime.*;
 import jadex.adapter.fipa.SFipa;
 import jadex.runtime.externalaccesswrapper.BeliefbaseWrapper;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
+import com.rssninja.models.*;
+import com.rssninja.utils.Database;
+import java.util.Collection;
+import java.util.ArrayList;
 /**
  *
  * @author unicorn
@@ -23,6 +24,8 @@ public class SearchDatabase extends Plan{
         //obtener el tag del usuario
         IBelief tagBelief = getBeliefbase().getBelief("tag");
         String tag = (String)tagBelief.getFact();
+        ArrayList<Link> links = (ArrayList)Database.INSTANCE.getNewLinks(tag);
+        getBeliefbase().getBelief("new_links").setFact(links);
     }
     
 }
