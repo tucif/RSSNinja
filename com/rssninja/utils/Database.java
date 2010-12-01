@@ -29,9 +29,9 @@ public class Database {
     private final String selectLinkByIdSQL = "SELECT * FROM link WHERE id = ?";
     private final String selectKeywodByIdSQL = "SELECT * FROM link WHERE id = ?";
     private final String getKnowledgeByServiceSQL = "SELECT * FROM knowledge WHERE servicio = ?";
-    private final String getNewLinks = "SELECT * FROM link WHERE id NOT IN(SELECT link FROM knowledge) AND keywords_id = ?";
+    private final String getNewLinks = "SELECT * FROM link WHERE id NOT IN(SELECT link FROM knowledge) AND keyword_id = ?";
     private final String getTagId = "SELECT id  FROM keyword WHERE value LIKE ?";
-    private final String saveLink = "INSERT INTO link (value,fecha,keyword_id) VALUES (?,?,?)";
+    private final String saveLinkQUERY = "INSERT INTO link (value,fecha,keyword_id) VALUES (?,?,?)";
     private Database(){        
     }
 
@@ -532,10 +532,10 @@ public int getTagId(String tagvalue){
         gi = c.prepareStatement(getTagId);
         gi.setString(1, tagvalue);
         result = gi.executeQuery();
-        result.close();
         if(result.next()){
             id = result.getInt(1);
         }
+        result.close();
     }catch(SQLException e){
         e.printStackTrace();
     }finally{
@@ -554,7 +554,7 @@ public Link saveLink(String link, String tag){
     int autoID = -1;
     try {
         c = getConnection();
-        sl = c.prepareStatement(saveLink,Statement.RETURN_GENERATED_KEYS);
+        sl = c.prepareStatement(saveLinkQUERY,Statement.RETURN_GENERATED_KEYS);
         sl.setString(1, link);
         sl.setString(2, "nada");
         sl.setInt(3, tag_id);
