@@ -15,6 +15,10 @@ package="com.rssninja.sensei">
     <capabilities>
         <capability name="amscap" file="jadex.planlib.AMS" />
     </capabilities>
+    <beliefs>
+        <beliefset name="tags" class="java.util.ArrayList">
+        </beliefset>
+    </beliefs>
     <goals>
         <achievegoalref name = "ams_create_agent">
             <concrete ref="amscap.ams_create_agent" />

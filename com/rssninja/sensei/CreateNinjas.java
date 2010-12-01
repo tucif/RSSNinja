@@ -5,12 +5,14 @@
 
 package com.rssninja.sensei;
 
+import com.rssninja.utils.Database;
 import jadex.adapter.fipa.AgentIdentifier;
 import jadex.adapter.fipa.SFipa;
 import jadex.runtime.IGoal;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 import java.util.HashMap;
+import java.util.List;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -37,14 +39,19 @@ public class CreateNinjas extends Plan {
 
     private void CreateAndSendToNinja(String tag){
 
-        HashMap<String,String> objectToSend=null;
+        //Update database with tag
+        Database.INSTANCE.insertKeyword(tag);
 
         //Create message
+        HashMap<String,String> objectToSend=null;
+
         IMessageEvent ime = createMessageEvent("send_request");
 
         objectToSend=new HashMap<String,String>();
         objectToSend.put("search", tag);
         objectToSend.put("sensei",this.getAgentIdentifier().getName());
+
+        
         String message = JSONObject.toJSONString(objectToSend);
 
         ime.setContent(message);
@@ -60,5 +67,6 @@ public class CreateNinjas extends Plan {
 
         //Send message
         sendMessage(ime);
+
     }
 }
