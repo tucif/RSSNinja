@@ -85,7 +85,7 @@ package="com.rssninja.ninja">
     </goals>
     <plans>
         <plan name = "send_info">
-            <body> null <!--new SendInfoToSensei()--> </body>
+            <body> new SendInfoToSensei()</body>
             <trigger>
                <goal ref="send_links" />
             </trigger>
