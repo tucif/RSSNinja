@@ -10,19 +10,17 @@ package com.rssninja.models;
  * @author unicorn
  */
 public class Knowledge {
+    
     private int id;
-
-    public Knowledge(int id, Link link, Keyword keyword, String service, int relevance) {
+    private Link link;
+    private String service;
+    private int relevance;
+    public Knowledge(int id, Link link, String service, int relevance) {
         this.id = id;
         this.link = link;
-        this.keyword = keyword;
         this.service = service;
         this.relevance = relevance;
     }
-    private Link link;
-    private Keyword keyword;
-    private String service;
-    private int relevance;
 
     public int getId() {
         return id;
@@ -30,14 +28,6 @@ public class Knowledge {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Keyword getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(Keyword keyword) {
-        this.keyword = keyword;
     }
 
     public Link getLink() {
@@ -66,8 +56,8 @@ public class Knowledge {
     @Override
     public String toString(){
         return "Knowledge - \n keyword: "
-                +this.keyword.toString()
                 +"\nLink: "+this.link.toString()
-                +"\nService: "+this.service.toString();
+                +"\nService: "+this.service.toString()
+                +"\n relevance: "+this.relevance;
     }
 }

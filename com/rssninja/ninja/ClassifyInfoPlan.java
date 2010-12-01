@@ -33,23 +33,35 @@ public class ClassifyInfoPlan extends Plan{
         IBelief tagBelief = getBeliefbase().getBelief("tag");
         String tagStr = (String) tagBelief.getFact();
 
+
+
         Word tagWord = Database.INSTANCE.getWord(tagStr);
         
         AgentIdentifier agent = (AgentIdentifier)param.getValue();
         String messageContent=(String)json.get("content");
+        String link = (String) json.get("link");
 
         System.out.println("[Ninja] I received a message from : "+agent.getName());
         System.out.println("[Ninja] Message: "+messageContent);
         System.out.println("[Ninja] Semantic Analysis:");
         HashMap<String,Integer> semanticResults = SemanticAnalizer.Analize(messageContent, tagStr);
-        
+
+        int totalLinkRelevance = 0;
+
         for(String word : semanticResults.keySet()){
             Word relatedWord = Database.INSTANCE.insertWord(word);
-            if(relatedWord ==null){                
+            if(relatedWord == null){
                 continue;
             }
-            Database.INSTANCE.insertSemantic(tagWord,relatedWord,semanticResults.get(word));
+            int wordRelevance = semanticResults.get(word); 
+            Database.INSTANCE.insertSemantic(tagWord,relatedWord,wordRelevance);
+            //add word relevance to link acummulated relevance
+            totalLinkRelevance += wordRelevance;
         }
+
+        //Database.INSTANCE.saveLink(tagStr, link);
+
+        getBeliefbase().getBelief("info_updated").setFact(true);
     }
         
 }

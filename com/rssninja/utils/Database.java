@@ -22,14 +22,17 @@ public class Database {
     private final String selectSemanticSQL = "SELECT * FROM Semantic WHERE word1 = ? AND word2 = ?";
     private final String updateSemanticSQL = "UPDATE Semantic SET relation_factor = ? WHERE word1 = ? AND word2 = ?";
     private final String insertKeywordSQL = "INSERT INTO Keyword (value) values(?)";
-    private final String insertLinkSQL = "INSERT INTO link (value,fecha) values(?,?)";
-    private final String insertKnowledgeSQL = "INSERT INTO knowledge (link,keyword,servicio,relevancia) values(?,?,?,?)";
+    private final String insertLinkSQL = "INSERT INTO link (value,fecha,keyword_id) values(?,?.?)";
+    private final String insertKnowledgeSQL = "INSERT INTO knowledge (link,servicio,relevancia) values(?,?,?)";
     private final String selectLinkSQL = "SELECT * FROM link WHERE value = ?";
     private final String selectKeywordSQL = "SELECT * FROM keyword WHERE value = ?";
     private final String selectLinkByIdSQL = "SELECT * FROM link WHERE id = ?";
     private final String selectKeywodByIdSQL = "SELECT * FROM link WHERE id = ?";
     private final String getKnowledgeByServiceSQL = "SELECT * FROM knowledge WHERE servicio = ?";
-    private final String getKnowledgeByKeywordSQL = "SELECT * FROM knowledge WHERE keyword = ?";
+    private final String getNewLinks = "SELECT * FROM link WHERE id NOT IN(SELECT link FROM knowledge) AND keywords_id = ?";
+    private final String getTagId = "SELECT id  FROM keyword WHERE value LIKE ?";
+    private final String saveLink = "INSERT INTO link (value,fecha,keyword_id) VALUES (?,?,?)";
+    //private final String getKnowledgeByKeywordSQL = "SELECT * FROM knowledge WHERE keyword = ?";
     private Database(){        
     }
 
@@ -274,15 +277,16 @@ public class Database {
            }
            return new Keyword(autoID, value);
     }
-public Link insertLink(String value,String fecha){
+public Link insertLink(Keyword keyword,String value,String fecha){
     PreparedStatement iL = null;
     Connection c = null;
      int autoID = -1;
      try {
             c = getConnection();
             iL = c.prepareStatement(insertLinkSQL, Statement.RETURN_GENERATED_KEYS);
-            iL.setString(1, value);
-            iL.setString(2, fecha);
+            iL.setInt(1, keyword.getId());
+            iL.setString(2, value);
+            iL.setString(3, fecha);
             iL.executeUpdate();
             ResultSet keys = iL.getGeneratedKeys();
             if(keys.next()){
@@ -301,9 +305,9 @@ public Link insertLink(String value,String fecha){
                 e.printStackTrace();
             }
         }
-        return new Link(autoID, value,fecha);
+        return new Link(autoID ,keyword,value,fecha);
     }
-public Knowledge insertKnowledge(Link link, Keyword keyword,String service, int relevance){
+public Knowledge insertKnowledge(Link link,String service, int relevance){
     PreparedStatement iK = null;
     Connection c = null;
      int autoID = -1;
@@ -311,9 +315,8 @@ public Knowledge insertKnowledge(Link link, Keyword keyword,String service, int 
             c = getConnection();
             iK = c.prepareStatement(insertKnowledgeSQL, Statement.RETURN_GENERATED_KEYS);
             iK.setInt(1, link.getId());
-            iK.setInt(2, keyword.getId());
-            iK.setString(3,service);
-            iK.setInt(4,relevance);
+            iK.setString(2,service);
+            iK.setInt(3,relevance);
             iK.executeUpdate();
             ResultSet keys = iK.getGeneratedKeys();
             if(keys.next()){
@@ -332,7 +335,7 @@ public Knowledge insertKnowledge(Link link, Keyword keyword,String service, int 
                 e.printStackTrace();
             }
         }
-        return new Knowledge(autoID,link,keyword,service,relevance);
+        return new Knowledge(autoID,link,service,relevance);
     }
 public Link getLink(String value){
         Link l = null;
@@ -344,7 +347,7 @@ public Link getLink(String value){
             gL.setString(1, value);
             ResultSet rs = gL.executeQuery();
             if(rs.next()){
-                l = new Link(rs.getInt(1), rs.getString(2),rs.getString(3));
+                l = new Link(rs.getInt(1), getKeywordById(rs.getInt(2)),rs.getString(3),rs.getString(4));
             }
             rs.close();
             rs = null;
@@ -437,7 +440,7 @@ public Link getLinkById(int id){
             gK.setInt(1, id);
             ResultSet rs = gK.executeQuery();
             if(rs.next()){
-                l = new Link(rs.getInt(1), rs.getString(2),rs.getString(3));
+                l = new Link(rs.getInt(1),getKeywordById(rs.getInt(2)),rs.getString(3),rs.getString(4));
             }
             rs.close();
             rs = null;
@@ -472,9 +475,8 @@ public Collection<Knowledge> getKnowledgeByService(String service){
             while(result.next()){
                 resultList.add(new Knowledge(result.getInt(1), 
                         getLinkById(result.getInt(2)),
-                        getKeywordById(result.getInt(3)),
-                        result.getString(4),
-                        result.getInt(5)));
+                        result.getString(3),
+                        result.getInt(4)));
             }
             result.close();
             result = null;
@@ -489,24 +491,23 @@ public Collection<Knowledge> getKnowledgeByService(String service){
         }
         return resultList;
 }
-public Collection<Knowledge> getKnowledgeByKeyword(String keyword){
+public Collection<Link> getNewLinks(String tag){
         PreparedStatement gK = null;
         Connection c = null;
         ResultSet result = null;
-        List<Knowledge> resultList = new ArrayList<Knowledge>();
-        Keyword k = null;
+        List<Link> resultList = new ArrayList<Link>();
         try {
-            k= getKeyword(keyword);
             c = getConnection();
-            gK = c.prepareStatement(getKnowledgeByKeywordSQL);
-            gK.setInt(1, k.getId());
+            gK = c.prepareStatement(getNewLinks);
+            gK.setInt(1, getKeyword(tag).getId());
             result = gK.executeQuery();
             while(result.next()){
-                resultList.add(new Knowledge(result.getInt(1),
-                        getLinkById(result.getInt(2)),
-                        getKeywordById(result.getInt(3)),
-                        result.getString(4),
-                        result.getInt(5)));
+                resultList.add(
+                        new Link(result.getInt(1),
+                        getKeywordById(result.getInt(2)),
+                        result.getString(3),
+                        result.getString(4))
+                );
             }
             result.close();
             result = null;
@@ -520,5 +521,51 @@ public Collection<Knowledge> getKnowledgeByKeyword(String keyword){
             }
         }
         return resultList;
+}
+public int getTagId(String tagvalue){
+    PreparedStatement gi = null;
+    Connection c = null;
+    ResultSet result = null;
+    int id = 0;
+    try{
+        c = getConnection();
+        gi = c.prepareStatement(getTagId);
+        gi.setString(1, tagvalue);
+        result = gi.executeQuery();
+        result.close();
+        if(result.next()){
+            id = result.getInt(1);
+        }
+    }catch(SQLException e){
+        e.printStackTrace();
+    }finally{
+        try{
+            c.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    return id;
+}
+public void saveLink(String link, String tag){
+    PreparedStatement sl = null;
+    Connection c = null;
+    int tag_id = getTagId(tag);
+    try {
+        c = getConnection();
+        sl = c.prepareStatement(saveLink);
+        sl.setString(1, link);
+        sl.setString(2, "nada");
+        sl.setInt(3, tag_id);
+        sl.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }finally{
+        try{
+            c.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 }
 }
