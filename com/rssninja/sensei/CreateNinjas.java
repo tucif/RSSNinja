@@ -11,6 +11,7 @@ import jadex.adapter.fipa.SFipa;
 import jadex.runtime.IGoal;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.json.simple.JSONObject;
@@ -32,11 +33,18 @@ public class CreateNinjas extends Plan {
         if(content.containsKey("search")){
            String tag = (String)content.get("search");
            CreateAndSendToNinja(tag);
+        }else if(content.containsKey("similar")){
+            String tag = (String)content.get("similar");
+            System.out.println("Similar words!!!!");
+            ArrayList<String>words=(ArrayList<String>) Database.INSTANCE.getRelatedWords(tag, 1);
+            for(String string : words){
+                System.out.println(string);
+            }
         }else{
            sendMessage(message.createReply("informSend","Could not understand: "+message.getContent()));
         }
     }
-
+    
     private void CreateAndSendToNinja(String tag){
 
         //Update database with tag

@@ -32,6 +32,9 @@ public class Database {
     private final String getNewLinks = "SELECT * FROM link WHERE id NOT IN(SELECT link FROM knowledge) AND keyword_id = ?";
     private final String getTagId = "SELECT id  FROM keyword WHERE value LIKE ?";
     private final String saveLinkQUERY = "INSERT INTO link (value,fecha,keyword_id) VALUES (?,?,?)";
+    private final String getRelatedTags1 = "SELECT word2 FROM Semantic WHERE word1=(SELECT id FROM word WHERE value=?) ORDER_BY relation_factor";
+    private final String getRelatedTags2 = "SELECT word1 FROM Semantic WHERE word2=(SELECT id FROM word WHERE value=?) ORDER_BY relation_factor";
+
     private Database(){        
     }
 
@@ -276,11 +279,12 @@ public class Database {
            }
            return new Keyword(autoID, value);
     }
-public Link insertLink(Keyword keyword,String value,String fecha){
-    PreparedStatement iL = null;
-    Connection c = null;
-     int autoID = -1;
-     try {
+
+    public Link insertLink(Keyword keyword,String value,String fecha){
+        PreparedStatement iL = null;
+        Connection c = null;
+        int autoID = -1;
+        try {
             c = getConnection();
             iL = c.prepareStatement(insertLinkSQL, Statement.RETURN_GENERATED_KEYS);
             iL.setInt(1, keyword.getId());
@@ -306,7 +310,8 @@ public Link insertLink(Keyword keyword,String value,String fecha){
         }
         return new Link(autoID ,keyword,value,fecha);
     }
-public Knowledge insertKnowledge(Link link,String service, String tag,int relevance){
+
+    public Knowledge insertKnowledge(Link link,String service, String tag,int relevance){
     PreparedStatement iK = null;
     Connection c = null;
      int autoID = -1;
@@ -337,7 +342,8 @@ public Knowledge insertKnowledge(Link link,String service, String tag,int releva
         }
         return new Knowledge(autoID,link,service,relevance);
     }
-public Link getLink(String value){
+
+    public Link getLink(String value){
         Link l = null;
         PreparedStatement gL = null;
         Connection c = null;
@@ -368,7 +374,8 @@ public Link getLink(String value){
         }
         return l;
     }
-public Keyword getKeyword(String value){
+
+    public Keyword getKeyword(String value){
         Keyword k = null;
         PreparedStatement gK = null;
         Connection c = null;
@@ -399,7 +406,8 @@ public Keyword getKeyword(String value){
         }
         return k;
     }
-public Keyword getKeywordById(int id){
+
+    public Keyword getKeywordById(int id){
         Keyword k = null;
         PreparedStatement gK = null;
         Connection c = null;
@@ -430,7 +438,8 @@ public Keyword getKeywordById(int id){
         }
         return k;
     }
-public Link getLinkById(int id){
+
+    public Link getLinkById(int id){
         Link l = null;
         PreparedStatement gK = null;
         Connection c = null;
@@ -461,7 +470,8 @@ public Link getLinkById(int id){
         }
         return l;
     }
-public Collection<Knowledge> getKnowledgeByService(String service){
+
+    public Collection<Knowledge> getKnowledgeByService(String service){
         PreparedStatement gK = null;
         Connection c = null;
         ResultSet result = null;
@@ -490,8 +500,9 @@ public Collection<Knowledge> getKnowledgeByService(String service){
             }
         }
         return resultList;
-}
-public Collection<Link> getNewLinks(String tag){
+    }
+
+    public Collection<Link> getNewLinks(String tag){
         PreparedStatement gK = null;
         Connection c = null;
         ResultSet result = null;
@@ -521,61 +532,95 @@ public Collection<Link> getNewLinks(String tag){
             }
         }
         return resultList;
-}
-public int getTagId(String tagvalue){
-    PreparedStatement gi = null;
-    Connection c = null;
-    ResultSet result = null;
-    int id = 0;
-    try{
-        c = getConnection();
-        gi = c.prepareStatement(getTagId);
-        gi.setString(1, tagvalue);
-        result = gi.executeQuery();
-        if(result.next()){
-            id = result.getInt(1);
-        }
-        result.close();
-    }catch(SQLException e){
-        e.printStackTrace();
-    }finally{
+    }
+
+    public int getTagId(String tagvalue){
+        PreparedStatement gi = null;
+        Connection c = null;
+        ResultSet result = null;
+        int id = 0;
         try{
-            c.close();
+            c = getConnection();
+            gi = c.prepareStatement(getTagId);
+            gi.setString(1, tagvalue);
+            result = gi.executeQuery();
+            if(result.next()){
+                id = result.getInt(1);
+            }
+            result.close();
         }catch(SQLException e){
             e.printStackTrace();
+        }finally{
+            try{
+                c.close();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
         }
+        return id;
     }
-    return id;
-}
-public Link saveLink(String link, String tag){
-    PreparedStatement sl = null;
-    Connection c = null;
-    int tag_id = getTagId(tag);
-    int autoID = -1;
-    try {
-        c = getConnection();
-        sl = c.prepareStatement(saveLinkQUERY,Statement.RETURN_GENERATED_KEYS);
-        sl.setString(1, link);
-        sl.setString(2, "nada");
-        sl.setInt(3, tag_id);
-        sl.executeUpdate();
-        ResultSet keys = sl.getGeneratedKeys();
-        if(keys.next()){
-            autoID = keys.getInt(1);
-        }else{
-            System.out.println("Can't insert the link");
-        }
-        keys.close();
-        keys = null;
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }finally{
-        try{
-            c.close();
-        }catch(SQLException e){
+
+    public Link saveLink(String link, String tag){
+        PreparedStatement sl = null;
+        Connection c = null;
+        int tag_id = getTagId(tag);
+        int autoID = -1;
+        try {
+            c = getConnection();
+            sl = c.prepareStatement(saveLinkQUERY,Statement.RETURN_GENERATED_KEYS);
+            sl.setString(1, link);
+            sl.setString(2, "nada");
+            sl.setInt(3, tag_id);
+            sl.executeUpdate();
+            ResultSet keys = sl.getGeneratedKeys();
+            if(keys.next()){
+                autoID = keys.getInt(1);
+            }else{
+                System.out.println("Can't insert the link");
+            }
+            keys.close();
+            keys = null;
+        } catch (SQLException e) {
             e.printStackTrace();
+        }finally{
+            try{
+                c.close();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
         }
+        return new Link(autoID, new Keyword(tag_id, tag), link, "");
     }
-    return new Link(autoID, new Keyword(tag_id, tag), link, "");
+
+    public Collection<String> getRelatedWords(String word, int column){
+        PreparedStatement gK = null;
+        Connection c = null;
+        ResultSet result = null;
+        List<String> resultList = new ArrayList<String>();
+        try {
+            c = getConnection();
+            if(column==1){
+                gK = c.prepareStatement(getRelatedTags1);
+            }else{
+                gK = c.prepareStatement(getRelatedTags2);
+            }
+            gK.setString(1, word);
+            result = gK.executeQuery();
+            while(result.next()){
+                resultList.add(result.getString(1));
+            }
+            result.close();
+            result = null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                c.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return resultList;
+    }
 }
-}
+
