@@ -16,7 +16,7 @@ package="com.rssninja.sensei">
         <capability name="amscap" file="jadex.planlib.AMS" />
     </capabilities>
     <beliefs>
-        <beliefset name="tags" class="java.util.ArrayList">
+        <beliefset name="tags" class="String">
         </beliefset>
     </beliefs>
     <goals>

@@ -68,5 +68,7 @@ public class CreateNinjas extends Plan {
         //Send message
         sendMessage(ime);
 
+        //Update my belief base
+        this.getBeliefbase().getBeliefSet("tags").addFact(tag);
     }
 }
