@@ -37,6 +37,12 @@ package="com.rssninja.sensei">
 		<messageevent ref="received_request" />
 	    </trigger>
         </plan>
+        <plan name = "show_links">
+            <body>new ShowLinks()</body>
+            <trigger>
+		<messageevent ref="received_query" />
+	    </trigger>
+        </plan>
     </plans>
     <events>
         <messageevent name="received_request" direction="receive" type="fipa">
@@ -48,6 +54,16 @@ package="com.rssninja.sensei">
             <parameter name="performative" class="String" direction = "fixed">
                 <value>jadex.adapter.fipa.SFipa.INFORM</value>
             </parameter>            
+        </messageevent>
+        <messageevent name ="received_query" direction = "receive" type="fipa">
+            <parameter name="performative" class="String" direction = "fixed">
+                <value>jadex.adapter.fipa.SFipa.CONFIRM</value>
+            </parameter>
+        </messageevent>
+        <messageevent name ="send_query" direction = "send" type="fipa">
+            <parameter name="performative" class="String" direction = "fixed">
+                <value>jadex.adapter.fipa.SFipa.CONFIRM</value>
+            </parameter>
         </messageevent>
          <messageevent name ="send_inform" direction = "send" type="fipa">
             <parameter name="performative" class="String" direction = "fixed">

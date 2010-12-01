@@ -32,6 +32,7 @@ public class Database {
     private final String getNewLinks = "SELECT * FROM link WHERE id NOT IN(SELECT link FROM knowledge) AND keyword_id = ?";
     private final String getTagId = "SELECT id  FROM keyword WHERE value LIKE ?";
     private final String saveLinkQUERY = "INSERT INTO link (value,fecha,keyword_id) VALUES (?,?,?)";
+    private final String getKnowledgeByKeywordSQL = "select k.id, l.id, l.value, k.servicio, k.relevancia from knowledge as k LEFT JOIN link as l ON k.link = l.id where l.keyword_id = (SELECT id from keyword where value= ? ) order by k.relevancia desc";
     private Database(){        
     }
 
@@ -476,6 +477,37 @@ public Collection<Knowledge> getKnowledgeByService(String service){
                         getLinkById(result.getInt(2)),
                         result.getString(3),
                         result.getInt(4)));
+            }
+            result.close();
+            result = null;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                c.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return resultList;
+}
+
+public Collection<Knowledge> getKnowledgeByKeyword(String keyword){
+        PreparedStatement gK = null;
+        Connection c = null;
+        ResultSet result = null;
+        List<Knowledge> resultList = new ArrayList<Knowledge>();
+
+        try {
+            c = getConnection();
+            gK = c.prepareStatement(getKnowledgeByKeywordSQL);
+            gK.setString(1, keyword);
+            result = gK.executeQuery();            
+            while(result.next()){
+                resultList.add(new Knowledge(result.getInt(1),
+                        new Link(result.getInt(2),getKeyword(keyword),result.getString(3),""),
+                        result.getString(4),
+                        result.getInt(5)));
             }
             result.close();
             result = null;

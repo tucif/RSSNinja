@@ -59,7 +59,7 @@ public class AprendizTwitpic  extends Plan{
             for (Object photo : photos) {
                 objectToSend = new JSONObject();
                 objectToSend.put("service", "twitpic");
-                objectToSend.put("link", "http://twitpic.com/"+((JSONObject)photo).get("id"));
+                objectToSend.put("link", "http://twitpic.com/"+((JSONObject)photo).get("short_id"));
                 objectToSend.put("content",((JSONObject)photo).get("message"));
 
                 metadata = new JSONObject();
