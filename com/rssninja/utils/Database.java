@@ -32,7 +32,6 @@ public class Database {
     private final String getNewLinks = "SELECT * FROM link WHERE id NOT IN(SELECT link FROM knowledge) AND keywords_id = ?";
     private final String getTagId = "SELECT id  FROM keyword WHERE value LIKE ?";
     private final String saveLink = "INSERT INTO link (value,fecha,keyword_id) VALUES (?,?,?)";
-    //private final String getKnowledgeByKeywordSQL = "SELECT * FROM knowledge WHERE keyword = ?";
     private Database(){        
     }
 
@@ -307,7 +306,7 @@ public Link insertLink(Keyword keyword,String value,String fecha){
         }
         return new Link(autoID ,keyword,value,fecha);
     }
-public Knowledge insertKnowledge(Link link,String service, int relevance){
+public Knowledge insertKnowledge(Link link,String service, String tag,int relevance){
     PreparedStatement iK = null;
     Connection c = null;
      int autoID = -1;
@@ -318,6 +317,7 @@ public Knowledge insertKnowledge(Link link,String service, int relevance){
             iK.setString(2,service);
             iK.setInt(3,relevance);
             iK.executeUpdate();
+            saveLink(link.getValue(), tag);
             ResultSet keys = iK.getGeneratedKeys();
             if(keys.next()){
                 autoID = keys.getInt(1);

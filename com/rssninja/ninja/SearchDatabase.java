@@ -28,5 +28,4 @@ public class SearchDatabase extends Plan{
         getBeliefbase().getBelief("new_links").setFact(links);
         getBeliefbase().getBelief("info_updated").setFact(true);
     }
-    
 }
