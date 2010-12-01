@@ -28,34 +28,38 @@ public class CreateNinjas extends Plan {
         String contentStr = (String) message.getContent();
 
         //Json format: {"search":"tag"}
-        JSONObject content = (JSONObject)JSONValue.parse(contentStr);
-        if(content.containsKey("search")){
-           String tag = (String)content.get("search");
-           CreateAndSendToNinja(tag);
+        try{
+            JSONObject content = (JSONObject)JSONValue.parse(contentStr);
+            if(content.containsKey("search")){
+               String tag = (String)content.get("search");
+               CreateAndSendToNinja(tag);
 
-           //Check to see if there are related terms
-           ArrayList<String>words=(ArrayList<String>) Database.INSTANCE.getRelatedWords(tag, 1);
-           if(words!=null && words.size()>0){
-               for(int i=0; i<3;i++){
-                   if(words.size()>0){
-                       System.out.println("[Sensei] Found a word related to "+tag+" -> "+words.get(i));
-                       System.out.println("[Sensei] Created a new Ninja to search for "+words.get(i));
-                       CreateAndSendToNinja(words.get(i));
-                   }else{
-                       break;
+               //Check to see if there are related terms
+               ArrayList<String>words=(ArrayList<String>) Database.INSTANCE.getRelatedWords(tag, 1);
+               if(words!=null && words.size()>0){
+                   for(int i=0; i<3;i++){
+                       if(words.size()>0){
+                           System.out.println("[Sensei] Found a word related to "+tag+" -> "+words.get(i));
+                           System.out.println("[Sensei] Created a new Ninja to search for "+words.get(i));
+                           CreateAndSendToNinja(words.get(i));
+                       }else{
+                           break;
+                       }
                    }
                }
-           }
 
-        }else if(content.containsKey("similar")){
-            String tag = (String)content.get("similar");
-            System.out.println("[Sensei] This are similar words to the tag: "+tag);
-            ArrayList<String>words=(ArrayList<String>) Database.INSTANCE.getRelatedWords(tag, 1);
-            for(String string : words){
-                System.out.println(string);
+            }else if(content.containsKey("similar")){
+                String tag = (String)content.get("similar");
+                System.out.println("[Sensei] This are similar words to the tag: "+tag);
+                ArrayList<String>words=(ArrayList<String>) Database.INSTANCE.getRelatedWords(tag, 1);
+                for(String string : words){
+                    System.out.println(string);
+                }
+            }else{
+               sendMessage(message.createReply("send_inform","Could not understand, did you mean 'search' or 'similar'? : "+message.getContent()));
             }
-        }else{
-           sendMessage(message.createReply("informSend","Could not understand: "+message.getContent()));
+        }catch(Exception e){
+            sendMessage(message.createReply("send_inform","Wrong message format: "+message.getContent()));
         }
     }
     

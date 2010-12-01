@@ -71,7 +71,7 @@ public class SemanticAnalizer {
         return rel.length() == 1 && Character.isDigit(rel.charAt(0));
     }   
 
-    private static final Character[] symbArr = {'&','\"','-',',','(',')','.','=','\\',':','/','?','*','!',';',']','[','_'};
+    private static final Character[] symbArr = {'&','\"','-',',','(',')','.','=','\\',':','/','?','*','!',';',']','[','_','I','a'};
     
 
     private static final String [] prepos = {
