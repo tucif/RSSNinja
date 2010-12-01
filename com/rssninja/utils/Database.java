@@ -316,8 +316,7 @@ public Knowledge insertKnowledge(Link link,String service, String tag,int releva
             iK.setInt(1, link.getId());
             iK.setString(2,service);
             iK.setInt(3,relevance);
-            iK.executeUpdate();
-            saveLink(link.getValue(), tag);
+            iK.executeUpdate();            
             ResultSet keys = iK.getGeneratedKeys();
             if(keys.next()){
                 autoID = keys.getInt(1);

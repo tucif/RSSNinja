@@ -14,6 +14,8 @@ public class Link {
     private Keyword keyword;
     private String value;
     private String date;
+    private int relevance;
+    private String service;
 
     public String getDate() {
         return date;
@@ -29,6 +31,25 @@ public class Link {
         this.keyword = keyword;
         this.value = value;
         this.date = date;
+        this.relevance=0;
+        this.service = "";
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
+
+    
+    public void setRelevance(int relevance) {
+        this.relevance = relevance;
+    }
+
+    public int getRelevance() {
+        return relevance;
     }
 
     public int getId() {
@@ -55,6 +76,6 @@ public class Link {
     }
     @Override
     public String toString(){
-        return "Link : "+this.value+" and Date "+this.date+" keyword: "+this.keyword;
+        return "Link : "+this.value+" keyword: "+this.keyword + ", Relevance: "+this.getRelevance() + " from: "+ this.getService();
     }
 }
