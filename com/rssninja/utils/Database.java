@@ -32,7 +32,7 @@ public class Database {
     private final String getNewLinks = "SELECT * FROM link WHERE id NOT IN(SELECT link FROM knowledge) AND keyword_id = ?";
     private final String getTagId = "SELECT id  FROM keyword WHERE value LIKE ?";
     private final String saveLinkQUERY = "INSERT INTO link (value,fecha,keyword_id) VALUES (?,?,?)";
-    private final String getKnowledgeByKeywordSQL = "select k.id, l.id, l.value, k.servicio, k.relevancia from knowledge as k LEFT JOIN link as l ON k.link = l.id where l.keyword_id = (SELECT id from keyword where value= ? ) order by k.relevancia desc";
+    private final String getKnowledgeByKeywordSQL = "select k.id, l.id, l.value, k.servicio, k.relevancia from knowledge as k LEFT JOIN link as l ON k.link = l.id where l.keyword_id IN (SELECT id from keyword where value= ? ) order by k.relevancia desc";
 
     private final String getRelatedTags1 = "select w.value, s.relation_factor from Semantic as s LEFT JOIN word as w ON s.word2 = w.id where s.word1 IN (SELECT id from word where value = ?) order by s.relation_factor desc";
     private final String getRelatedTags2 = "SELECT word1 FROM Semantic WHERE word2=(SELECT id FROM word WHERE value=?) ORDER_BY relation_factor";
