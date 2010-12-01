@@ -67,7 +67,11 @@ public class ClassifyInfoPlan extends Plan{
         
         //Save link to DB and beliefbase
         Link l = Database.INSTANCE.saveLink(link, tagStr);
+        l.setRelevance(totalLinkRelevance);
+        l.setService(agent.getName());
         getBeliefbase().getBeliefSet("new_links").addFact(l);
+
+        
         
         getBeliefbase().getBelief("info_updated").setFact(true);
     }

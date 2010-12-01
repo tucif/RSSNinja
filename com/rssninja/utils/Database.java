@@ -32,7 +32,7 @@ public class Database {
     private final String getNewLinks = "SELECT * FROM link WHERE id NOT IN(SELECT link FROM knowledge) AND keyword_id = ?";
     private final String getTagId = "SELECT id  FROM keyword WHERE value LIKE ?";
     private final String saveLinkQUERY = "INSERT INTO link (value,fecha,keyword_id) VALUES (?,?,?)";
-    private final String getRelatedTags1 = "SELECT word2 FROM Semantic WHERE word1=(SELECT id FROM word WHERE value=?) ORDER_BY relation_factor";
+    private final String getRelatedTags1 = "select w.value, s.relation_factor from Semantic as s LEFT JOIN word as w ON s.word2 = w.id where s.word1 IN (SELECT id from word where value = ?) order by s.relation_factor desc";
     private final String getRelatedTags2 = "SELECT word1 FROM Semantic WHERE word2=(SELECT id FROM word WHERE value=?) ORDER_BY relation_factor";
 
     private Database(){        
@@ -321,8 +321,7 @@ public class Database {
             iK.setInt(1, link.getId());
             iK.setString(2,service);
             iK.setInt(3,relevance);
-            iK.executeUpdate();
-            saveLink(link.getValue(), tag);
+            iK.executeUpdate();            
             ResultSet keys = iK.getGeneratedKeys();
             if(keys.next()){
                 autoID = keys.getInt(1);
@@ -623,4 +622,3 @@ public class Database {
         return resultList;
     }
 }
-

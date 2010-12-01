@@ -45,7 +45,11 @@ public class SendInfoToSensei extends Plan{
 
         IMessageEvent ime = createMessageEvent("informSend");
         //Asignar contenido del mensaje
-        ime.setContent(CreateLinksJSON(links));                
+        ime.setContent(CreateLinksJSON(links));
+
+
+        String tag = (String)getBeliefbase().getBelief("tag").getFact();
+
 
         //sacar agent identifier de sensei del beliefbase
         AgentIdentifier mySensei = new AgentIdentifier((String)getBeliefbase().getBelief("sensei").getFact());
@@ -53,6 +57,10 @@ public class SendInfoToSensei extends Plan{
         
         //Send message
         sendMessage(ime);
+
+
+        //Reestablecer belief de new_links
+        getBeliefbase().getBeliefSet("new_links").removeFacts();
         
         //Reestablecer belief de info_updated
         getBeliefbase().getBelief("info_updated").setFact(false);
@@ -61,10 +69,24 @@ public class SendInfoToSensei extends Plan{
     private String CreateLinksJSON(ArrayList<Link> linkList){
         StringBuilder json = new StringBuilder();
         json.append("{\"links\":[");
-        for(Link l : linkList){
-            json.append("\"");
-                json.append(l.getValue());
-            json.append("\"");
+        for(int i = 0; i< linkList.size(); i++){
+            Link l = linkList.get(i);
+            json.append("{\"id\":\"");
+            json.append(l.getId());
+            json.append("\",\"value\":\"");
+            json.append(l.getValue());
+            json.append("\",\"relevance\":\"");
+            json.append(l.getRelevance());
+            json.append("\",\"service\":\"");
+            json.append(l.getService());
+            json.append("\",\"tag_id\":\"");
+            json.append(l.getKeyword().getId());
+            json.append("\",\"tag_value\":\"");
+            json.append(l.getKeyword().getValue());
+            json.append("\"}");
+            if(linkList.size() > 1 && i < linkList.size() - 1){
+                json.append(",");
+            }
         }
         json.append("]}");
         return json.toString();

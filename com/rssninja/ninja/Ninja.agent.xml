@@ -25,6 +25,8 @@ package="com.rssninja.ninja">
                 <!--Database.getRelatedLinks(getBeliefbase().getBelief("tag"))-->
             </facts>
         </beliefset>
+        <beliefset name="related_tags" class="String">
+        </beliefset>
         <belief name="sensei" class="String">
             <fact>null</fact>
         </belief>
@@ -48,13 +50,12 @@ package="com.rssninja.ninja">
         <achievegoalref name = "ams_create_agent">
             <concrete ref="amscap.ams_create_agent" />
         </achievegoalref>
-        <achievegoal name ="send_links" exclude="never">
-            <unique/>
+        <achievegoal name ="send_links" exclude="never">            
             <creationcondition>
                 $beliefbase.info_updated
             </creationcondition>
             <targetcondition>
-                !$beliefbase.info_updated
+                $beliefbase.info_updated == false
             </targetcondition>
             <!--<deliberation>
                 <inhibits ref="maintain_performance" />

@@ -5,6 +5,10 @@
 
 package com.rssninja.sensei;
 
+import com.rssninja.models.Keyword;
+import com.rssninja.models.Knowledge;
+import com.rssninja.models.Link;
+import com.rssninja.utils.Database;
 import jadex.adapter.fipa.AgentIdentifier;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.IParameter;
@@ -32,16 +36,25 @@ public class ManageInformation extends Plan {
 
         AgentIdentifier agent = (AgentIdentifier)param.getValue();
         JSONArray linkJSONArray=(JSONArray)json.get("links");
+        
+        for(Object link:linkJSONArray){
+            JSONObject jsonLink = (JSONObject)link;
 
+            int id = Integer.parseInt((String)jsonLink.get("id"));
+            String value = (String)jsonLink.get("value");
+            int relevancia = Integer.parseInt((String)jsonLink.get("relevance"));
+            String service = (String)jsonLink.get("service");
+            int tag_id = Integer.parseInt((String)jsonLink.get("tag_id"));
+            String tag_value = (String)jsonLink.get("tag_value");
 
-        Object[] linkArrayObj= linkJSONArray.toArray();
-        ArrayList<String> linkArray= new ArrayList<String>();
-        for(Object object:linkArrayObj){
-            linkArray.add((String)object);
-        }
-        System.out.println("[Sensei]- -Message recieved. Link Array length:"+linkArray.size());
-        for(int i=0; i<linkArray.size();i++){
-            System.out.println("[Sensei] I received a link from "+agent.getName()+" : "+linkArray.get(i));
-        }
+            Link l = new Link(id, new Keyword(tag_id, tag_value), value, "");
+            l.setRelevance(relevancia);
+            l.setService(service);
+            if(relevancia>0){
+                Database.INSTANCE.insertKnowledge(l, service, tag_value, relevancia);
+            }
+
+            System.out.println("[Sensei] I received a link from "+agent.getName()+" : "+l);
+        }        
     }
 }
