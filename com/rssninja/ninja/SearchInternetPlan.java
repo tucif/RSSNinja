@@ -33,7 +33,7 @@ public class SearchInternetPlan extends Plan{
         JSONObject content = (JSONObject)JSONValue.parse(contentStr);
         
         //Set SENSEI
-        BasicAgentIdentifier sensei = new BasicAgentIdentifier((String)content.get("sensei"));
+        AgentIdentifier sensei = new AgentIdentifier((String)content.get("sensei"));
         getBeliefbase().getBelief("sensei").setFact(sensei);
 
         if(content.containsKey("search")){
