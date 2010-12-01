@@ -103,13 +103,13 @@ package="com.rssninja.ninja">
         <plan name = "get_info">
             <body>new SearchInternetPlan()</body>
             <trigger>
-                <messageevent ref="pull"/>
+                <messageevent ref="searchTagReceived"/>
                 <goal ref="search_info" />
             </trigger>
         </plan>
     </plans>
     <events>
-        <messageevent name="pull" direction="receive" type="fipa">
+        <messageevent name="searchTagReceived" direction="receive" type="fipa">
             <parameter name="performative" class="String" direction="fixed">
                 <value>jadex.adapter.fipa.SFipa.REQUEST</value>
             </parameter>

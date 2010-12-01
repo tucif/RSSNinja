@@ -1,0 +1,59 @@
+<!--
+    Document   : Sensei.agent.xml
+    Created on : October 2, 2010, 7:19 PM
+    Author     : unicorn
+    Description:
+        Purpose of the document follows.
+-->
+
+<agent xmlns="http://jadex.sourceforge.net/jadex"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://jadex.sourceforge.net/jadex
+http://jadex.sourceforge.net/jadex-0.96.xsd"
+name="Sensei"
+package="com.rssninja.sensei">
+    <capabilities>
+        <capability name="amscap" file="jadex.planlib.AMS" />
+    </capabilities>
+    <goals>
+        <achievegoalref name = "ams_create_agent">
+            <concrete ref="amscap.ams_create_agent" />
+        </achievegoalref>
+    </goals>
+    <plans>
+        <plan name = "send_info">
+            <body>new ManageInformation()</body>
+            <trigger>
+		<messageevent ref="received_info" />
+	    </trigger>
+        </plan>
+        <plan name = "create_ninjas">
+            <body>new CreateNinjas()</body>
+            <trigger>
+		<messageevent ref="received_request" />
+	    </trigger>
+        </plan>
+    </plans>
+    <events>
+        <messageevent name="received_request" direction="receive" type="fipa">
+            <parameter name="performative" class="String" direction="fixed">
+                <value>jadex.adapter.fipa.SFipa.REQUEST</value>
+            </parameter>
+        </messageevent>
+        <messageevent name ="received_info" direction = "receive" type="fipa">
+            <parameter name="performative" class="String" direction = "fixed">
+                <value>jadex.adapter.fipa.SFipa.INFORM</value>
+            </parameter>            
+        </messageevent>
+         <messageevent name ="send_inform" direction = "send" type="fipa">
+            <parameter name="performative" class="String" direction = "fixed">
+                <value>jadex.adapter.fipa.SFipa.INFORM</value>
+            </parameter>
+        </messageevent>
+        <messageevent name="send_request" direction="send" type="fipa">
+            <parameter name="performative" class="String" direction="fixed">
+                <value>jadex.adapter.fipa.SFipa.REQUEST</value>
+            </parameter>
+        </messageevent>
+    </events>
+</agent>
