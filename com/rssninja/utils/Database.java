@@ -578,3 +578,9 @@ public Link saveLink(String link, String tag){
     return new Link(autoID, new Keyword(tag_id, tag), link, "");
 }
 }
+
+
+/*
+
+ select w.value, s.relation_factor from Semantic as s LEFT JOIN word as w ON s.word2 = w.id where s.word1 IN (SELECT id from word where value = 'potter') order by s.relation_factor;
+ */

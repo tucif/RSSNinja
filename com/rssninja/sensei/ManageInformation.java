@@ -50,8 +50,9 @@ public class ManageInformation extends Plan {
             Link l = new Link(id, new Keyword(tag_id, tag_value), value, "");
             l.setRelevance(relevancia);
             l.setService(service);
-            
-            Database.INSTANCE.insertKnowledge(l, service, tag_value, relevancia);
+            if(relevancia>0){
+                Database.INSTANCE.insertKnowledge(l, service, tag_value, relevancia);
+            }
 
             System.out.println("[Sensei] I received a link from "+agent.getName()+" : "+l);
         }        
