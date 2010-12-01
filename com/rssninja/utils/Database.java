@@ -547,17 +547,26 @@ public int getTagId(String tagvalue){
     }
     return id;
 }
-public void saveLink(String link, String tag){
+public Link saveLink(String link, String tag){
     PreparedStatement sl = null;
     Connection c = null;
     int tag_id = getTagId(tag);
+    int autoID = -1;
     try {
         c = getConnection();
-        sl = c.prepareStatement(saveLink);
+        sl = c.prepareStatement(saveLink,Statement.RETURN_GENERATED_KEYS);
         sl.setString(1, link);
         sl.setString(2, "nada");
         sl.setInt(3, tag_id);
         sl.executeUpdate();
+        ResultSet keys = sl.getGeneratedKeys();
+        if(keys.next()){
+            autoID = keys.getInt(1);
+        }else{
+            System.out.println("Can't insert the link");
+        }
+        keys.close();
+        keys = null;
     } catch (SQLException e) {
         e.printStackTrace();
     }finally{
@@ -567,5 +576,6 @@ public void saveLink(String link, String tag){
             e.printStackTrace();
         }
     }
+    return new Link(autoID, new Keyword(tag_id, tag), link, "");
 }
 }

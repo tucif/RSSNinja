@@ -21,12 +21,12 @@ package="com.rssninja.ninja">
         </belief>
         <beliefset name="related_links" class="String">
             <facts evaluationmode="dynamic">
-                Null
+                null
                 <!--Database.getRelatedLinks(getBeliefbase().getBelief("tag"))-->
             </facts>
         </beliefset>
-        <belief name="sensei" class="String">
-            <fact>"GenericSensei"</fact>
+        <belief name="sensei" class="jadex.runtime.BasicAgentIdentifier">
+            <fact>null</fact>
         </belief>
         <belief name="performance" class="Float">
             <fact>3.0F</fact>
@@ -40,7 +40,7 @@ package="com.rssninja.ninja">
         <belief name="update_interval" class="long">
             <fact>5*60*1000L</fact><!-- quitar numeros magicos -->
         </belief>
-        <beliefset name ="new_links" class="java.util.ArrayList">
+        <beliefset name ="new_links" class="com.rssninja.models.Link">
             <facts>null</facts>
         </beliefset>
     </beliefs>
@@ -48,14 +48,17 @@ package="com.rssninja.ninja">
         <achievegoalref name = "ams_create_agent">
             <concrete ref="amscap.ams_create_agent" />
         </achievegoalref>
-        <achievegoal name ="send_links">
+        <achievegoal name ="send_links" exclude="never">
             <unique/>
             <creationcondition>
                 $beliefbase.info_updated
             </creationcondition>
-            <deliberation>
+            <targetcondition>
+                !$beliefbase.info_updated
+            </targetcondition>
+            <!--<deliberation>
                 <inhibits ref="maintain_performance" />
-            </deliberation>
+            </deliberation>-->
         </achievegoal>
         <maintaingoal name="maintain_performance">
             <maintaincondition>

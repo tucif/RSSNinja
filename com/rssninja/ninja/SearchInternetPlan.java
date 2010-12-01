@@ -31,6 +31,11 @@ public class SearchInternetPlan extends Plan{
 
         //Json format: {"search":"tag"}
         JSONObject content = (JSONObject)JSONValue.parse(contentStr);
+        
+        //Set SENSEI
+        BasicAgentIdentifier sensei = new BasicAgentIdentifier((String)content.get("sensei"));
+        getBeliefbase().getBelief("sensei").setFact(sensei);
+
         if(content.containsKey("search")){
            String tag = (String)content.get("search");
            registerTagBelief(tag);

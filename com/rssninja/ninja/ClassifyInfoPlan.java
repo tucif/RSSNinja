@@ -5,7 +5,7 @@
 
 package com.rssninja.ninja;
 
-import com.rssninja.models.Word;
+import com.rssninja.models.*;
 import com.rssninja.utils.Database;
 import jadex.adapter.fipa.AgentIdentifier;
 import jadex.runtime.*;
@@ -13,7 +13,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import com.rssninja.utils.SemanticAnalizer;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -47,6 +50,8 @@ public class ClassifyInfoPlan extends Plan{
         HashMap<String,Integer> semanticResults = SemanticAnalizer.Analize(messageContent, tagStr);
 
         int totalLinkRelevance = 0;
+        //Guardar link en beliefset de new_links
+        
 
         for(String word : semanticResults.keySet()){
             Word relatedWord = Database.INSTANCE.insertWord(word);
@@ -54,13 +59,16 @@ public class ClassifyInfoPlan extends Plan{
                 continue;
             }
             int wordRelevance = semanticResults.get(word); 
-            Database.INSTANCE.insertSemantic(tagWord,relatedWord,wordRelevance);
+            Database.INSTANCE.insertSemantic(tagWord,relatedWord,wordRelevance);                        
             //add word relevance to link acummulated relevance
             totalLinkRelevance += wordRelevance;
         }
 
-        //Database.INSTANCE.saveLink(tagStr, link);
-
+        
+        //Save link to DB and beliefbase
+        Link l = Database.INSTANCE.saveLink(link, tagStr);
+        getBeliefbase().getBeliefSet("new_links").addFact(l);
+        
         getBeliefbase().getBelief("info_updated").setFact(true);
     }
         

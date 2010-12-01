@@ -33,7 +33,7 @@ public class ManageInformation extends Plan {
         JSONArray linkJSONArray=(JSONArray)json.get("links");
 
         String[] linkArray= (String[]) linkJSONArray.toArray();
-
+        System.out.println("[Sensei]- -Message recieved. Link Array length:"+linkArray.length);
         for(int i=0; i<linkArray.length;i++){
             System.out.println("[Sensei] I received a link from "+agent.getName()+" : "+linkArray[i]);
         }
