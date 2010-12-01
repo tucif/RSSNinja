@@ -25,6 +25,8 @@ package="com.rssninja.ninja">
                 <!--Database.getRelatedLinks(getBeliefbase().getBelief("tag"))-->
             </facts>
         </beliefset>
+        <beliefset name="related_tags" class="String">
+        </beliefset>
         <belief name="sensei" class="String">
             <fact>null</fact>
         </belief>
