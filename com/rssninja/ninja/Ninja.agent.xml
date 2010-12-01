@@ -48,13 +48,12 @@ package="com.rssninja.ninja">
         <achievegoalref name = "ams_create_agent">
             <concrete ref="amscap.ams_create_agent" />
         </achievegoalref>
-        <achievegoal name ="send_links" exclude="never">
-            <unique/>
+        <achievegoal name ="send_links" exclude="never">            
             <creationcondition>
                 $beliefbase.info_updated
             </creationcondition>
             <targetcondition>
-                !$beliefbase.info_updated
+                $beliefbase.info_updated == false
             </targetcondition>
             <!--<deliberation>
                 <inhibits ref="maintain_performance" />

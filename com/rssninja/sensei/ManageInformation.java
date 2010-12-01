@@ -33,10 +33,10 @@ public class ManageInformation extends Plan {
         AgentIdentifier agent = (AgentIdentifier)param.getValue();
         JSONArray linkJSONArray=(JSONArray)json.get("links");
 
-
-        Object[] linkArrayObj= linkJSONArray.toArray();
+        
+//        Object[] linkArrayObj= linkJSONArray.toArray();
         ArrayList<String> linkArray= new ArrayList<String>();
-        for(Object object:linkArrayObj){
+        for(Object object:linkJSONArray){
             linkArray.add((String)object);
         }
         System.out.println("[Sensei]- -Message recieved. Link Array length:"+linkArray.size());
