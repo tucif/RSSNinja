@@ -30,6 +30,8 @@ public class Database {
     private final String selectKeywodByIdSQL = "SELECT * FROM link WHERE id = ?";
     private final String getKnowledgeByServiceSQL = "SELECT * FROM knowledge WHERE servicio = ?";
     private final String getNewLinks = "SELECT * FROM link WHERE id NOT IN(SELECT link FROM knowledge) AND keywords_id = ?";
+    private final String getTagId = "SELECT id  FROM keyword WHERE value LIKE ?";
+    private final String saveLink = "INSERT INTO link (value,fecha,keyword_id) VALUES (?,?,?)";
     //private final String getKnowledgeByKeywordSQL = "SELECT * FROM knowledge WHERE keyword = ?";
     private Database(){        
     }
@@ -494,7 +496,6 @@ public Collection<Link> getNewLinks(String tag){
         Connection c = null;
         ResultSet result = null;
         List<Link> resultList = new ArrayList<Link>();
-
         try {
             c = getConnection();
             gK = c.prepareStatement(getNewLinks);
@@ -520,5 +521,51 @@ public Collection<Link> getNewLinks(String tag){
             }
         }
         return resultList;
+}
+public int getTagId(String tagvalue){
+    PreparedStatement gi = null;
+    Connection c = null;
+    ResultSet result = null;
+    int id = 0;
+    try{
+        c = getConnection();
+        gi = c.prepareStatement(getTagId);
+        gi.setString(1, tagvalue);
+        result = gi.executeQuery();
+        result.close();
+        if(result.next()){
+            id = result.getInt(1);
+        }
+    }catch(SQLException e){
+        e.printStackTrace();
+    }finally{
+        try{
+            c.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+    return id;
+}
+public void saveLink(String link, String tag){
+    PreparedStatement sl = null;
+    Connection c = null;
+    int tag_id = getTagId(tag);
+    try {
+        c = getConnection();
+        sl = c.prepareStatement(saveLink);
+        sl.setString(1, link);
+        sl.setString(2, "nada");
+        sl.setInt(3, tag_id);
+        sl.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }finally{
+        try{
+            c.close();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 }
 }

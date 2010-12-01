@@ -26,6 +26,7 @@ public class SearchDatabase extends Plan{
         String tag = (String)tagBelief.getFact();
         ArrayList<Link> links = (ArrayList)Database.INSTANCE.getNewLinks(tag);
         getBeliefbase().getBelief("new_links").setFact(links);
+        getBeliefbase().getBelief("info_updated").setFact(true);
     }
     
 }
