@@ -21,7 +21,7 @@ public class Database {
     private final String insertSemanticSQL = "INSERT INTO Semantic (word1,word2,relation_factor) VALUES (?,?,?)";
     private final String selectSemanticSQL = "SELECT * FROM Semantic WHERE word1 = ? AND word2 = ?";
     private final String updateSemanticSQL = "UPDATE Semantic SET relation_factor = ? WHERE word1 = ? AND word2 = ?";
-    private final String insertKeywordSQL = "INSERT INTO Keyword (value) values(?)";
+    private final String insertKeywordSQL = "INSERT INTO keyword (value) values(?)";
     private final String insertLinkSQL = "INSERT INTO link (value,fecha,keyword_id) values(?,?.?)";
     private final String insertKnowledgeSQL = "INSERT INTO knowledge (link,servicio,relevancia) values(?,?,?)";
     private final String selectLinkSQL = "SELECT * FROM link WHERE value = ?";

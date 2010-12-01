@@ -48,9 +48,10 @@ public class SendInfoToSensei extends Plan{
         ime.setContent(CreateLinksJSON(links));                
 
         //sacar agent identifier de sensei del beliefbase
-        BasicAgentIdentifier mySensei = (BasicAgentIdentifier)getBeliefbase().getBelief("sensei").getFact();
+        AgentIdentifier mySensei = new AgentIdentifier((String)getBeliefbase().getBelief("sensei").getFact());
         ime.getParameterSet(SFipa.RECEIVERS).addValue(mySensei);
         
+
         //Send message
         sendMessage(ime);
         
